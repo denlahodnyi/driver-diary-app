@@ -1,6 +1,7 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import IonIcon from 'react-native-vector-icons/Ionicons';
 import { Bookmarks, Feed, Settings, Stats, Vehicles } from './screens';
 
 const { Navigator, Screen } = createNativeStackNavigator<MainStackParamsList>();
@@ -23,7 +24,10 @@ export default function MainNavigator() {
         <Screen
           component={Vehicles}
           name="Vehicles"
-          options={{ title: 'Vehicles' }}
+          options={{
+            headerRight: () => <IonIcon name="cog" />,
+            title: 'Vehicles',
+          }}
         />
         <Screen
           component={Settings}
