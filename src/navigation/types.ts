@@ -1,4 +1,5 @@
 type MainStackParamsList = {
+  Activities: undefined;
   Settings: undefined;
   Vehicles: undefined;
 };

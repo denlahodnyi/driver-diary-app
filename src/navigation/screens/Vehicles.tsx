@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { type MainStackScreensMappedProps } from 'AppTypes/navigation';
 
 export default function Vehicles(
@@ -10,6 +10,9 @@ export default function Vehicles(
   return (
     <View>
       <Text>Vehicles</Text>
+      <Pressable onPress={() => navigation.navigate('Activities')}>
+        <Text>PRESS</Text>
+      </Pressable>
     </View>
   );
 }

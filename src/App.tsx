@@ -11,15 +11,14 @@ function App(): React.JSX.Element {
   // };
 
   return (
-    <SafeAreaView>
-      {/* <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      /> */}
-      <NavigationContainer>
-        <MainNavigator />
-      </NavigationContainer>
-    </SafeAreaView>
+    // <SafeAreaView>
+    //   <NavigationContainer>
+    //     <MainNavigator />
+    //   </NavigationContainer>
+    // </SafeAreaView>
+    <NavigationContainer>
+      <MainNavigator />
+    </NavigationContainer>
   );
 }
 
