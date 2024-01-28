@@ -1,7 +1,7 @@
 import React from 'react';
 import { SafeAreaView } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { MainNavigator } from './navigation';
+import { RootNavigator } from './app/navigation';
 
 function App(): React.JSX.Element {
   // const isDarkMode = useColorScheme() === 'dark';
@@ -11,13 +11,8 @@ function App(): React.JSX.Element {
   // };
 
   return (
-    // <SafeAreaView>
-    //   <NavigationContainer>
-    //     <MainNavigator />
-    //   </NavigationContainer>
-    // </SafeAreaView>
     <NavigationContainer>
-      <MainNavigator />
+      <RootNavigator />
     </NavigationContainer>
   );
 }

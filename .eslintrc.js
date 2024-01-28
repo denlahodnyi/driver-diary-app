@@ -7,9 +7,10 @@ module.exports = {
     'plugin:import/recommended',
     'plugin:import/typescript',
     '@react-native',
+    'plugin:react/jsx-runtime',
     'prettier',
   ],
-  plugins: ['@typescript-eslint', 'import', 'jest'],
+  plugins: ['@typescript-eslint', 'import', 'jest', 'sort-destructure-keys'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 2021,
@@ -56,7 +57,7 @@ module.exports = {
     ],
     // import
     'import/no-cycle': 1,
-    'import/no-unresolved': [2, { ignore: ['^AppTypes/'] }],
+    'import/no-unresolved': 2,
     'import/newline-after-import': 2,
     'import/first': 2,
     'import/order': [
@@ -92,20 +93,12 @@ module.exports = {
     'no-console': 1,
     'vars-on-top': 2,
     'no-duplicate-imports': 2,
-    'object-curly-newline': [
-      2,
-      {
-        ObjectExpression: {
-          multiline: true,
-          minProperties: 4,
-          consistent: true,
-        },
-        ObjectPattern: { multiline: true, minProperties: 4, consistent: true },
-      },
-    ],
     'space-before-blocks': 2,
     'sort-keys': [2, 'asc', { allowLineSeparatedGroups: true }],
+    'sort-destructure-keys/sort-destructure-keys': 2,
     'require-await': 2,
+    'no-unused-vars': 0,
+    '@typescript-eslint/no-unused-vars': 2,
     'padding-line-between-statements': 0,
     '@typescript-eslint/padding-line-between-statements': [
       2,

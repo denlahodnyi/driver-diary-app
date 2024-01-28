@@ -1,11 +1,11 @@
-import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import IonIcon from 'react-native-vector-icons/Ionicons';
-import { Bookmarks, Feed, Settings, Stats, Vehicles } from './screens';
+import { Bookmarks, Feed, Settings, Stats, Vehicles } from '~/screens';
+import { HeaderSettingsLink } from '~/widgets/navigation';
+import type { ActivitiesTabsParamsList, RootStackParamsList } from './types';
 
-const { Navigator, Screen } = createNativeStackNavigator<MainStackParamsList>();
-const Tab = createBottomTabNavigator();
+const { Navigator, Screen } = createNativeStackNavigator<RootStackParamsList>();
+const Tab = createBottomTabNavigator<ActivitiesTabsParamsList>();
 
 function ActivitiesNavigator() {
   return (
@@ -17,7 +17,7 @@ function ActivitiesNavigator() {
   );
 }
 
-export default function MainNavigator() {
+export default function RootNavigator() {
   return (
     <Navigator>
       <>
@@ -25,14 +25,17 @@ export default function MainNavigator() {
           component={Vehicles}
           name="Vehicles"
           options={{
-            headerRight: () => <IonIcon name="cog" />,
+            headerRight: () => <HeaderSettingsLink />,
             title: 'Vehicles',
           }}
         />
         <Screen
           component={Settings}
           name="Settings"
-          options={{ title: 'Settings' }}
+          options={{
+            headerBackTitleVisible: false,
+            title: 'Settings',
+          }}
         />
         <Screen
           component={ActivitiesNavigator}
