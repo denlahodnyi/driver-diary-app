@@ -6,13 +6,10 @@ import {
   inputBaseInputWrapper,
   inputBaseLabel,
 } from '~/app/styles';
+import { toArray } from '~/shared/utils';
 import HeadlessInput, { type HeadlessInputProps } from './HeadlessInput';
 
 type InputProps = HeadlessInputProps;
-
-const toArray = <T,>(styles: T): T[] => {
-  return Array.isArray(styles) ? styles : [styles];
-};
 
 export default function Input(props: InputProps) {
   return (

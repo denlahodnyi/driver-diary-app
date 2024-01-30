@@ -1,9 +1,9 @@
 import React from 'react';
-import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
+import { FlatList, StyleSheet, View } from 'react-native';
 import { AddNewVehicleCard } from '~/features/createNewVehicle';
 import type { NavTypes } from '~/app/navigation';
 import { card, screenPaddings } from '~/app/styles';
-import { Txt } from '~/shared/components';
+import { HorizontalSwipeView, Txt } from '~/shared/components';
 
 const DATA = [
   { title: 'Mom car', model: 'Mini Cooper' },
@@ -23,10 +23,15 @@ export default function Vehicles(
         data={DATA}
         keyExtractor={(item) => item.title}
         renderItem={(obj) => (
-          <View style={styles.listItem}>
+          <HorizontalSwipeView
+            style={styles.listItem}
+            onPress={() => {
+              console.log('Navigate to ' + obj.item.title);
+            }}
+          >
             <Txt style={styles.listItemMainTxt}>{obj.item.title}</Txt>
             <Txt style={styles.listItemSecondaryTxt}>{obj.item.model}</Txt>
-          </View>
+          </HorizontalSwipeView>
         )}
       />
     </View>

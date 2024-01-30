@@ -149,6 +149,11 @@ module.exports = {
         selector: 'variableLike',
         format: ['strictCamelCase', 'StrictPascalCase'],
       },
+      {
+        selector: 'variable',
+        modifiers: ['global'],
+        format: ['UPPER_CASE', 'strictCamelCase', 'StrictPascalCase'],
+      },
       // Enforce that boolean variables are prefixed with an allowed verb
       {
         selector: 'variable',
