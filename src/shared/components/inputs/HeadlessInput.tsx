@@ -4,7 +4,7 @@ import {
   View,
   type ViewProps,
 } from 'react-native';
-import Txt, { type TxtProps } from '../Txt';
+import Txt, { type TxtProps } from '../text/Txt';
 
 export type HeadlessInputProps = {
   containerProps?: ViewProps;

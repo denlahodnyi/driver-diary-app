@@ -1,1 +1,1 @@
-export { default as HeaderSettingsLink } from './HeaderSettingsLink';
+export { HeaderSettingsLink, HeaderVehiclesLink } from './ui';

@@ -27,6 +27,7 @@ export default function Vehicles(
             style={styles.listItem}
             onPress={() => {
               console.log('Navigate to ' + obj.item.title);
+              navigation.navigate('Activities', { screen: 'Feed' });
             }}
           >
             <Txt style={styles.listItemMainTxt}>{obj.item.title}</Txt>

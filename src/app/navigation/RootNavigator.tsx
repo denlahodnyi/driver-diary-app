@@ -1,7 +1,9 @@
+import { View } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Bookmarks, Feed, Settings, Stats, Vehicles } from '~/screens';
-import { HeaderSettingsLink } from '~/widgets/navigation';
+import { HeaderSettingsLink, HeaderVehiclesLink } from '~/widgets/navigation';
+import { Icon } from '~/shared/components';
 import type { ActivitiesTabsParamsList, RootStackParamsList } from './types';
 
 const { Navigator, Screen } = createNativeStackNavigator<RootStackParamsList>();
@@ -9,10 +11,47 @@ const Tab = createBottomTabNavigator<ActivitiesTabsParamsList>();
 
 function ActivitiesNavigator() {
   return (
-    <Tab.Navigator>
-      <Tab.Screen component={Feed} name="Feed" />
-      <Tab.Screen component={Bookmarks} name="Bookmarks" />
-      <Tab.Screen component={Stats} name="Stats" />
+    <Tab.Navigator
+      backBehavior="none"
+      initialRouteName="Feed"
+      screenOptions={{
+        headerLeft: () => (
+          <View style={{ paddingLeft: 10 }}>
+            <HeaderVehiclesLink />
+          </View>
+        ),
+        headerRight: () => (
+          <View style={{ paddingRight: 10 }}>
+            <HeaderSettingsLink />
+          </View>
+        ),
+        tabBarShowLabel: false,
+      }}
+    >
+      <Tab.Screen
+        component={Feed}
+        name="Feed"
+        options={{
+          tabBarAccessibilityLabel: 'Feed',
+          tabBarIcon: () => <Icon name="list" size={30} />,
+        }}
+      />
+      <Tab.Screen
+        component={Bookmarks}
+        name="Bookmarks"
+        options={{
+          tabBarAccessibilityLabel: 'Bookmarks',
+          tabBarIcon: () => <Icon name="bookmark" size={30} />,
+        }}
+      />
+      <Tab.Screen
+        component={Stats}
+        name="Stats"
+        options={{
+          tabBarAccessibilityLabel: 'Statistics',
+          tabBarIcon: () => <Icon name="pie-chart" size={30} />,
+        }}
+      />
     </Tab.Navigator>
   );
 }

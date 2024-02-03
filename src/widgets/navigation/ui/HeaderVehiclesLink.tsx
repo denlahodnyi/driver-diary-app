@@ -2,12 +2,15 @@ import { StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Icon } from '~/shared/components';
 
-export default function HeaderSettingsLink() {
+export default function HeaderVehiclesLink() {
   const navigation = useNavigation();
 
   return (
-    <TouchableWithoutFeedback onPress={() => navigation.navigate('Settings')}>
-      <Icon name="cog" size={30} />
+    <TouchableWithoutFeedback
+      accessibilityLabel="Go to Vehicles screen"
+      onPress={() => navigation.navigate('Vehicles')}
+    >
+      <Icon name="car" size={30} />
     </TouchableWithoutFeedback>
   );
 }
