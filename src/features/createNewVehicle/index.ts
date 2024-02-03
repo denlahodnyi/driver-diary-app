@@ -1,0 +1,1 @@
+export { AddNewVehicleCard } from './ui';
