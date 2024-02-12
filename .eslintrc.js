@@ -90,6 +90,7 @@ module.exports = {
       },
     ],
     // other
+    'no-catch-shadow': 0,
     'no-console': 1,
     'vars-on-top': 2,
     'no-duplicate-imports': 2,
@@ -177,5 +178,6 @@ module.exports = {
         prefix: ['T'],
       },
     ],
+    '@typescript-eslint/no-explicit-any': [2, { ignoreRestArgs: true }],
   },
 };

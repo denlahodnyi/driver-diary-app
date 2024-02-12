@@ -1,7 +1,10 @@
-import React from 'react';
-import { SafeAreaView } from 'react-native';
+// import { Platform, SafeAreaView } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
+import { DatabaseProvider } from '@nozbe/watermelondb/react';
+import { Database } from '../db';
 import { RootNavigator } from './app/navigation';
+
+const database = Database.getInstance();
 
 function App(): React.JSX.Element {
   // const isDarkMode = useColorScheme() === 'dark';
@@ -11,9 +14,11 @@ function App(): React.JSX.Element {
   // };
 
   return (
-    <NavigationContainer>
-      <RootNavigator />
-    </NavigationContainer>
+    <DatabaseProvider database={database}>
+      <NavigationContainer>
+        <RootNavigator />
+      </NavigationContainer>
+    </DatabaseProvider>
   );
 }
 

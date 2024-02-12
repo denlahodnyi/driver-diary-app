@@ -1,1 +1,5 @@
-export { HeaderSettingsLink, HeaderVehiclesLink } from './ui';
+export {
+  HeaderSettingsLink,
+  HeaderNewVehicleLink,
+  HeaderVehiclesLink,
+} from './ui';
