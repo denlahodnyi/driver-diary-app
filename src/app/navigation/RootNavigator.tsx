@@ -1,8 +1,13 @@
+/* eslint-disable react/no-unstable-nested-components */
 import { View } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Bookmarks, Feed, Settings, Stats, Vehicles } from '~/screens';
-import { HeaderSettingsLink, HeaderVehiclesLink } from '~/widgets/navigation';
+import { Bookmarks, Feed, Settings, Stats, Vehicle, Vehicles } from '~/screens';
+import {
+  HeaderNewVehicleLink,
+  HeaderSettingsLink,
+  HeaderVehiclesLink,
+} from '~/widgets/navigation';
 import { Icon } from '~/shared/components';
 import type { ActivitiesTabsParamsList, RootStackParamsList } from './types';
 
@@ -64,9 +69,20 @@ export default function RootNavigator() {
           component={Vehicles}
           name="Vehicles"
           options={{
+            headerLeft: () => <HeaderNewVehicleLink />,
             headerRight: () => <HeaderSettingsLink />,
             title: 'Vehicles',
           }}
+        />
+        <Screen
+          component={Vehicle}
+          name="Vehicle"
+          options={({ route }) => ({
+            presentation: 'formSheet',
+            title: route.params?.vehicleId
+              ? 'Edit vehicle'
+              : 'Create new vehicle',
+          })}
         />
         <Screen
           component={Settings}

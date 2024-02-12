@@ -35,11 +35,13 @@ type StateStatus =
   | 'fully_swiped'
   | 'swipe_cancel';
 
-const DEFAULT_CONFIG = {
-  disableLeftSwipe: false,
-  disableRightSwipe: false,
+const DEFAULT_CONFIG: Required<
+  NonNullable<HorizontalSwipeViewProps['config']>
+> = {
   fullLeftSwipeThreshold: 200,
   fullRightSwipeThreshold: 200,
+  isLeftSwipeDisabled: false,
+  isRightSwipeDisabled: false,
   leftSwipeShift: 150,
   longPressDelay: 301,
   rightSwipeShift: 150,

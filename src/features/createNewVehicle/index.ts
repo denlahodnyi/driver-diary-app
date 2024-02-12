@@ -1,1 +1,1 @@
-export { AddNewVehicleCard } from './ui';
+export { VehicleForm } from './ui';
