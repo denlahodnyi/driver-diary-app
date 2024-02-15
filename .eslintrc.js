@@ -10,7 +10,7 @@ module.exports = {
     'plugin:react/jsx-runtime',
     'prettier',
   ],
-  plugins: ['@typescript-eslint', 'import', 'jest', 'sort-destructure-keys'],
+  plugins: ['@typescript-eslint', 'import', 'sort-destructure-keys'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 2021,
@@ -34,6 +34,16 @@ module.exports = {
   env: {
     'jest/globals': true,
   },
+  overrides: [
+    {
+      files: ['**/__tests__/**/*', '**/*.test.ts'],
+      plugins: ['jest', 'jest-extended'],
+      extends: ['plugin:jest/recommended', 'plugin:jest-extended/all'],
+      env: {
+        'jest/globals': true,
+      },
+    },
+  ],
   rules: {
     // react-native
     'react-native/sort-styles': [2, 'asc'],
@@ -149,6 +159,7 @@ module.exports = {
       {
         selector: 'variableLike',
         format: ['strictCamelCase', 'StrictPascalCase'],
+        leadingUnderscore: 'allow',
       },
       {
         selector: 'variable',
