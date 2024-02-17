@@ -1,11 +1,21 @@
+import { Observable } from 'rxjs';
+
 const dbInstance = {
+  adapter: {},
+  collection: {},
   get: jest.fn(() => ({
     create: () => ({}),
     find: jest.fn(),
     query: () => ({
-      observeWithColumns: () => ({}),
+      observeWithColumns: () => {
+        return new Observable((sub) => {
+          sub.next([]);
+          sub.complete();
+        });
+      },
     }),
   })),
+  schema: {},
   write: jest.fn(),
 };
 

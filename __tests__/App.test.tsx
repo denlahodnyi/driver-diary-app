@@ -1,15 +1,19 @@
-import 'react-native';
-// Note: import explicitly to use the types shipped with jest.
-// import { it } from '@jest/globals';
-// Note: test renderer must be required after react-native.
-import renderer from 'react-test-renderer';
-import App from '../src/App';
+import { render } from '@testing-library/react-native';
+import { Database as WatermelonDb } from '@nozbe/watermelondb';
+import App from '~/App';
 
-// it('renders correctly', () => {
-//   renderer.create(<App />);
-// });
+jest.mock('db');
 
-it('must be null (__TEST__)', () => {
-  expect([]).toBeEmpty();
-  expect(undefined).toBeNil();
+beforeAll(() => {
+  // Redefine how watermelondb Database class checks its instances, so it won't
+  // shout on mocked one
+  Object.defineProperty(WatermelonDb, Symbol.hasInstance, {
+    value() {
+      return true;
+    },
+  });
+});
+
+it('renders correctly', () => {
+  render(<App />);
 });

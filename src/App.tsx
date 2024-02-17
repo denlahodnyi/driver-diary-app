@@ -1,7 +1,7 @@
 // import { Platform, SafeAreaView } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { DatabaseProvider } from '@nozbe/watermelondb/react';
-import { Database } from '../db';
+import { Database } from 'db';
 import { RootNavigator } from './app/navigation';
 
 const database = Database.getInstance();
