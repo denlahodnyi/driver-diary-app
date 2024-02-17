@@ -7,7 +7,9 @@ module.exports = {
   clearMocks: true,
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'node'],
   moduleNameMapper: {
-    db: '<rootDir>/db/',
+    '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
+      '<rootDir>/__mocks__/fileMock.js',
+    '^db(/(.*))?$': '<rootDir>/db/$1',
     '~/(.*)': '<rootDir>/src/$1',
   },
   preset: 'react-native',
@@ -36,6 +38,6 @@ module.exports = {
     ],
   },
   transformIgnorePatterns: [
-    '/node_modules/(?!(@react-rxjs|@rx-state|@react-native|react-native)/)',
+    '/node_modules/(?!(@react-rxjs|@rx-state|@react-native|react-native|react-native-vector-icons)/)',
   ],
 };
