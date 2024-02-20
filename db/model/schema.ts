@@ -13,7 +13,7 @@ const myTableSchema: MyTableSchema = tableSchema;
 
 /* eslint-disable sort-keys */
 export default appSchema({
-  version: 1,
+  version: 2,
   tables: [
     myTableSchema({
       name: 'vehicles',
@@ -23,5 +23,43 @@ export default appSchema({
         { name: 'created_at', type: 'number' },
       ],
     }),
+    myTableSchema({
+      name: 'activities',
+      columns: [
+        { name: 'category_id', type: 'string' },
+        { name: 'is_bookmark', type: 'boolean' },
+        { name: 'created_at', type: 'number' },
+      ],
+    }),
+    myTableSchema({
+      name: 'categories',
+      columns: [{ name: 'name', type: 'string' }],
+    }),
+    myTableSchema({
+      name: 'sub_categories',
+      columns: [
+        { name: 'name', type: 'string' },
+        { name: 'category_id', type: 'string', isIndexed: true },
+      ],
+    }),
+    myTableSchema({
+      name: 'attributes',
+      columns: [{ name: 'name', type: 'string' }],
+    }),
+    myTableSchema({
+      name: 'category_attributes',
+      columns: [
+        { name: 'category_id', type: 'string', isIndexed: true },
+        { name: 'attribute_id', type: 'string' },
+      ],
+    }),
+    // myTableSchema({
+    //   name: 'activity_attribute_values',
+    //   columns: [
+    //     { name: 'activity_id', type: 'string', isIndexed: true },
+    //     { name: 'attribute_id', type: 'string' },
+    //     { name: 'value', type: 'string' },
+    //   ],
+    // }),
   ],
 });
