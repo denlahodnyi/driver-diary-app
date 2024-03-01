@@ -12,31 +12,15 @@ export default schemaMigrations({
         createTable({
           name: 'activities',
           columns: [
+            { name: 'vehicle_id', type: 'string' },
             { name: 'category_id', type: 'string' },
+            { name: 'subcategory_id', type: 'string', isOptional: true },
             { name: 'is_bookmark', type: 'boolean' },
+            { name: 'date', type: 'number' },
+            { name: 'cost', type: 'number', isOptional: true },
+            { name: 'comment', type: 'string', isOptional: true },
+            { name: 'location', type: 'string', isOptional: true },
             { name: 'created_at', type: 'number' },
-          ],
-        }),
-        createTable({
-          name: 'categories',
-          columns: [{ name: 'name', type: 'string' }],
-        }),
-        createTable({
-          name: 'sub_categories',
-          columns: [
-            { name: 'name', type: 'string' },
-            { name: 'category_id', type: 'string', isIndexed: true },
-          ],
-        }),
-        createTable({
-          name: 'attributes',
-          columns: [{ name: 'name', type: 'string' }],
-        }),
-        createTable({
-          name: 'category_attributes',
-          columns: [
-            { name: 'category_id', type: 'string', isIndexed: true },
-            { name: 'attribute_id', type: 'string' },
           ],
         }),
       ],

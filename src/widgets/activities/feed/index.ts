@@ -1,1 +1,1 @@
-export { Timeline } from './ui';
+export { ActivitiesToolbar, Timeline } from './ui';

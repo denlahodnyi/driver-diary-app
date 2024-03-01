@@ -26,40 +26,18 @@ export default appSchema({
     myTableSchema({
       name: 'activities',
       columns: [
+        { name: 'vehicle_id', type: 'string' },
         { name: 'category_id', type: 'string' },
+        { name: 'subcategory_id', type: 'string', isOptional: true },
         { name: 'is_bookmark', type: 'boolean' },
+        { name: 'date', type: 'number' },
+        { name: 'cost', type: 'number', isOptional: true },
+        // TODO: add currency_code: string
+        { name: 'comment', type: 'string', isOptional: true },
+        { name: 'location', type: 'string', isOptional: true },
         { name: 'created_at', type: 'number' },
+        // @TODO: add tag column
       ],
     }),
-    myTableSchema({
-      name: 'categories',
-      columns: [{ name: 'name', type: 'string' }],
-    }),
-    myTableSchema({
-      name: 'sub_categories',
-      columns: [
-        { name: 'name', type: 'string' },
-        { name: 'category_id', type: 'string', isIndexed: true },
-      ],
-    }),
-    myTableSchema({
-      name: 'attributes',
-      columns: [{ name: 'name', type: 'string' }],
-    }),
-    myTableSchema({
-      name: 'category_attributes',
-      columns: [
-        { name: 'category_id', type: 'string', isIndexed: true },
-        { name: 'attribute_id', type: 'string' },
-      ],
-    }),
-    // myTableSchema({
-    //   name: 'activity_attribute_values',
-    //   columns: [
-    //     { name: 'activity_id', type: 'string', isIndexed: true },
-    //     { name: 'attribute_id', type: 'string' },
-    //     { name: 'value', type: 'string' },
-    //   ],
-    // }),
   ],
 });

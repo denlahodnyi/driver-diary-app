@@ -32,6 +32,11 @@ function Vehicles(props: NavTypes.RootStackScreenProps<'Vehicles'>) {
     ]);
   };
 
+  const handleNavigateToVehicle = (vehicle: (typeof allVehicles)[number]) => {
+    vehicleModel.saveVehicleIdToStorage(vehicle.id);
+    navigation.navigate('Activities', { screen: 'Feed' });
+  };
+
   return (
     <View style={styles.screen}>
       <FlatList
@@ -74,11 +79,7 @@ function Vehicles(props: NavTypes.RootStackScreenProps<'Vehicles'>) {
               )}
               style={styles.listItem}
               onPress={() => {
-                console.log(
-                  'Navigate to ' + obj.item.title,
-                  obj.item.createdAt,
-                );
-                navigation.navigate('Activities', { screen: 'Feed' });
+                handleNavigateToVehicle(obj.item);
               }}
             >
               <Txt style={styles.listItemMainTxt}>{obj.item.title}</Txt>

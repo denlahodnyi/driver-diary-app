@@ -2,14 +2,25 @@
 import { View } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Bookmarks, Feed, Settings, Stats, Vehicle, Vehicles } from '~/screens';
 import {
+  Activity,
+  Bookmarks,
+  Categories,
+  Feed,
+  Settings,
+  Stats,
+  Vehicle,
+  Vehicles,
+} from '~/screens';
+import {
+  HeaderActivityEditBtn,
   HeaderNewVehicleLink,
   HeaderSettingsLink,
   HeaderVehiclesLink,
 } from '~/widgets/navigation';
 import { Icon } from '~/shared/components';
 import type { ActivitiesTabsParamsList, RootStackParamsList } from './types';
+import { useStorageString } from '../storage';
 
 const { Navigator, Screen } = createNativeStackNavigator<RootStackParamsList>();
 const Tab = createBottomTabNavigator<ActivitiesTabsParamsList>();
@@ -62,8 +73,10 @@ function ActivitiesNavigator() {
 }
 
 export default function RootNavigator() {
+  const [selectedVehicleId] = useStorageString('selectedVehicleId');
+
   return (
-    <Navigator>
+    <Navigator initialRouteName={selectedVehicleId ? 'Activities' : 'Vehicles'}>
       <>
         <Screen
           component={Vehicles}
@@ -96,6 +109,20 @@ export default function RootNavigator() {
           component={ActivitiesNavigator}
           name="Activities"
           options={{ headerShown: false }}
+        />
+        <Screen
+          component={Categories}
+          name="Categories"
+          options={{ headerBackTitleVisible: false, title: 'Select category' }}
+        />
+        <Screen
+          component={Activity}
+          name="Activity"
+          options={({ route }) => ({
+            headerBackTitleVisible: false,
+            headerRight: () =>
+              route.params.mode === 'view' ? <HeaderActivityEditBtn /> : null,
+          })}
         />
       </>
     </Navigator>

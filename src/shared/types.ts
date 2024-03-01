@@ -15,3 +15,13 @@ export type ActionHookReturn = [
   (...p: any[]) => Promise<{ data: unknown; error: TError; success: boolean }>,
   { error: TError; isLoading: boolean },
 ];
+
+type Fn = (...args: any[]) => void;
+
+export type Methods<T> = {
+  [Key in keyof T]: T[Key] extends Fn ? T[Key] : never;
+};
+
+export type MethodsReturn<T> = {
+  [Key in keyof T]: T[Key] extends Fn ? ReturnType<T[Key]> : never;
+};

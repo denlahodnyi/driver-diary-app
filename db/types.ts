@@ -1,11 +1,4 @@
-export type TableName =
-  | 'vehicles'
-  | 'activities'
-  | 'categories'
-  | 'sub_categories'
-  | 'attributes'
-  | 'category_attributes'
-  | 'activity_attribute_values';
+export type TableName = 'vehicles' | 'activities';
 
 export type Associations = {
   [Name in TableName]?:
