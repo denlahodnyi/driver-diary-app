@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { type TextInputProps } from 'react-native';
 import {
   inputBaseContainer,
   inputBaseError,
@@ -9,9 +9,17 @@ import {
 import { toArray } from '~/shared/utils';
 import HeadlessInput, { type HeadlessInputProps } from './HeadlessInput';
 
-type InputProps = HeadlessInputProps;
+export type InputProps<T extends object = TextInputProps> =
+  HeadlessInputProps<T>;
 
-export default function Input(props: InputProps) {
+// Modify TextInputProps to make it more flexible for TextInput-like components
+type TextILikeProps = Omit<TextInputProps, 'onChangeText'> & {
+  onChangeText?: (value: string, ...rest: any[]) => void;
+};
+
+export default function Input<T extends TextILikeProps = TextInputProps>(
+  props: InputProps<T>,
+) {
   return (
     <HeadlessInput
       {...props}
@@ -30,8 +38,7 @@ export default function Input(props: InputProps) {
       labelProps={{
         style: [inputBaseLabel, ...toArray(props.labelProps?.style)],
       }}
-      style={[inputBaseInput, ...toArray(props.style)]}
+      style={[inputBaseInput, ...toArray(props?.style)]}
     />
   );
 }
-const styles = StyleSheet.create({});

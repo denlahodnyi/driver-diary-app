@@ -32,13 +32,17 @@ module.exports = {
     },
   },
   env: {
-    'jest/globals': true,
+    // 'jest/globals': true,
   },
   overrides: [
     {
-      files: ['**/__tests__/**/*', '**/*.test.ts'],
-      plugins: ['jest', 'jest-extended'],
-      extends: ['plugin:jest/recommended', 'plugin:jest-extended/all'],
+      files: ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[jt]s?(x)'],
+      plugins: ['jest', 'jest-extended', 'testing-library'],
+      extends: [
+        'plugin:jest/recommended',
+        'plugin:jest-extended/all',
+        'plugin:testing-library/react',
+      ],
       env: {
         'jest/globals': true,
       },

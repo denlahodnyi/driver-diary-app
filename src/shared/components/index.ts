@@ -5,4 +5,10 @@ export {
 } from './text/VerticalText';
 export { default as Icon, type IconProps } from './Icon';
 export { default as HorizontalSwipeView } from './HorizontalSwipeView';
-export { HeadlessInput, type HeadlessInputProps, Input } from './inputs';
+export {
+  CurrencyInput,
+  HeadlessInput,
+  type HeadlessInputProps,
+  Input,
+  maskCurrency,
+} from './inputs';

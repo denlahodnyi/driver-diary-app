@@ -13,7 +13,7 @@ const myTableSchema: MyTableSchema = tableSchema;
 
 /* eslint-disable sort-keys */
 export default appSchema({
-  version: 1,
+  version: 2,
   tables: [
     myTableSchema({
       name: 'vehicles',
@@ -21,6 +21,22 @@ export default appSchema({
         { name: 'title', type: 'string' },
         { name: 'model', type: 'string' },
         { name: 'created_at', type: 'number' },
+      ],
+    }),
+    myTableSchema({
+      name: 'activities',
+      columns: [
+        { name: 'vehicle_id', type: 'string' },
+        { name: 'category_id', type: 'string' },
+        { name: 'subcategory_id', type: 'string', isOptional: true },
+        { name: 'is_bookmark', type: 'boolean' },
+        { name: 'date', type: 'number' },
+        { name: 'cost', type: 'number', isOptional: true },
+        // TODO: add currency_code: string
+        { name: 'comment', type: 'string', isOptional: true },
+        { name: 'location', type: 'string', isOptional: true },
+        { name: 'created_at', type: 'number' },
+        // @TODO: add tag column
       ],
     }),
   ],

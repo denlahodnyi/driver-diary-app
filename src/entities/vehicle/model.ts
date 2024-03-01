@@ -3,9 +3,9 @@ import { bind } from '@react-rxjs/core';
 import { ValidationError } from '~/shared/classes';
 import { buildActionHookResult, formatError } from '~/shared/utils';
 import type { ActionHookReturn, DataHookReturn, TError } from '~/shared/types';
+import { storage } from '~/app/storage';
+import { GENERAL_ERROR_MESSAGE } from '~/app/constants';
 import { Database, type Vehicle } from 'db';
-
-const GENERAL_ERROR_MESSAGE = 'Some error occurred';
 
 const db = Database.getInstance();
 
@@ -38,6 +38,16 @@ async function getVehicleById(id: string) {
   return await db.get<Vehicle>('vehicles').find(id);
 }
 
+function saveVehicleIdToStorage(vehicleId: Vehicle['id']) {
+  storage.set('selectedVehicleId', vehicleId);
+}
+
+function getSavedVehicleId() {
+  const savedVehicle = storage.getString('selectedVehicleId');
+
+  return savedVehicle ? JSON.parse(savedVehicle) : null;
+}
+
 function useVehicles() {
   const data = useObservedVehicles();
 
@@ -45,6 +55,7 @@ function useVehicles() {
 }
 
 function useVehicleById(id: string | null) {
+  // TODO: make it reactive
   const [vehicle, setVehicle] = useState<null | Vehicle>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<TError>(null);
@@ -91,6 +102,9 @@ function useCreateVehicle() {
   }) => {
     try {
       validate({ model, title });
+      setIsLoading(true);
+      setError(null);
+
       const newRecord = await db.write(() => {
         return db.get<Vehicle>('vehicles').create((record) => {
           record.title = title;
@@ -199,6 +213,8 @@ function useUpdateVehicle() {
 export {
   getVehicles,
   getVehicleById,
+  getSavedVehicleId,
+  saveVehicleIdToStorage,
   useCreateVehicle,
   useDeleteVehicle,
   useUpdateVehicle,

@@ -6,19 +6,23 @@ import {
 } from 'react-native';
 import Txt, { type TxtProps } from '../text/Txt';
 
-export type HeadlessInputProps = {
+export type HeadlessInputProps<T extends object = TextInputProps> = {
   containerProps?: ViewProps;
   endElement?: React.ReactNode;
   error?: string;
   errorProps?: TxtProps;
+  InputComponent?: React.ElementType;
   inputWrapperProps?: ViewProps;
   label?: string;
   labelProps?: TxtProps;
   startElement?: React.ReactNode;
-} & TextInputProps;
+} & T;
 
-export default function HeadlessInput(props: HeadlessInputProps) {
+export default function HeadlessInput<TProps extends object = TextInputProps>(
+  props: HeadlessInputProps<TProps>,
+) {
   const {
+    InputComponent,
     containerProps,
     endElement = null,
     error,
@@ -29,13 +33,15 @@ export default function HeadlessInput(props: HeadlessInputProps) {
     startElement = null,
     ...inputProps
   } = props;
+  // const Input = (InputComponent || TextInput) as React.ElementType;
+  const Input = InputComponent || TextInput;
 
   return (
     <View {...containerProps}>
       {label && <Txt {...labelProps}>{label}</Txt>}
       <View {...inputWrapperProps}>
         {startElement}
-        <TextInput {...inputProps} />
+        <Input {...inputProps} />
         {endElement}
       </View>
       {error && <Txt {...errorProps}>{error}</Txt>}

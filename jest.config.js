@@ -38,6 +38,6 @@ module.exports = {
     ],
   },
   transformIgnorePatterns: [
-    '/node_modules/(?!(@react-rxjs|@rx-state|@react-native|react-native|react-native-vector-icons)/)',
+    '/node_modules/(?!(@react-rxjs|@rx-state|@react-native|react-native|react-native-vector-icons|react-native-date-picker|react-native-picker-select)/)',
   ],
 };

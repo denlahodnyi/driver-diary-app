@@ -1,7 +1,7 @@
 import { Platform } from 'react-native';
 import { type Model, Database as WatermelonDB } from '@nozbe/watermelondb';
 import SQLiteAdapter from '@nozbe/watermelondb/adapters/sqlite';
-import { Vehicle, migrations, schema } from './model';
+import { Activity, Vehicle, migrations, schema } from './model';
 import { name as appName } from '../app.json';
 import type * as dbTypes from './types';
 
@@ -9,7 +9,7 @@ import type * as dbTypes from './types';
 const adapter = new SQLiteAdapter({
   schema,
   migrations,
-  dbName: `${appName}_db`,
+  dbName: `${appName}`, // [appName].db
   jsi: Platform.OS === 'ios',
   onSetUpError: (error) => {
     console.error(`SQLiteAdapter error: ${error}`);
@@ -26,7 +26,10 @@ class Database extends WatermelonDB {
 
   static getInstance() {
     if (!Database.instance) {
-      Database.instance = new Database({ adapter, modelClasses: [Vehicle] });
+      Database.instance = new Database({
+        adapter,
+        modelClasses: [Activity, Vehicle],
+      });
     }
     return Database.instance;
   }
@@ -36,4 +39,4 @@ class Database extends WatermelonDB {
   }
 }
 
-export { Database, Vehicle, type dbTypes };
+export { Activity, Database, Vehicle, type dbTypes };

@@ -1,65 +1,45 @@
-import { SectionList, StyleSheet, View } from 'react-native';
+import { useMemo } from 'react';
+import { SectionList, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { card } from '~/app/styles';
-import { Txt } from '~/shared/components';
+import { HorizontalSwipeView, Icon, Txt } from '~/shared/components';
+import { ActivityDeleteDecorator } from '~/features/activities/delete';
+import { activityLib } from '~/entities/activity';
+import { categoryLib } from '~/entities/category';
+import type { Activity } from 'db';
 
-const data = [
-  { id: 1, date: '2023-09-01', category: 'Petrol' },
-  { id: 2, date: '2023-09-10', category: 'Repair' },
-  { id: 3, date: '2023-11-23', category: 'Repair' },
-  { id: 4, date: '2023-11-23', category: 'Wash' },
-  { id: 5, date: '2023-12-11', category: 'Petrol' },
-  { id: 6, date: '2023-12-30', category: 'Petrol' },
-  { id: 7, date: '2024-01-02', category: 'Repair' },
-  { id: 8, date: '2024-01-12', category: 'Wash' },
-  { id: 9, date: '2024-01-13', category: 'Petrol' },
-];
-
-type List = {
-  years: number[];
-  byYear: Record<
-    number,
-    {
-      byDate: Record<string, (typeof data)[number][]>;
-      dates: string[];
-    }
-  >;
+type TimelineProps = {
+  activities: Activity[];
 };
 
-const groupedData = data.reduce<List>(
-  (prev, current) => {
-    const result = { ...prev };
-    const year = +current.date.split('-')[0];
+// TODO: sort by date
 
-    if (!result.years.includes(year)) {
-      result.years.push(year);
-      result.byYear[year] = {
-        byDate: {
-          [current.date]: [current],
-        },
-        dates: [current.date],
-      };
-    } else {
-      const yearDates = result.byYear[year];
+export default function Timeline(props: TimelineProps) {
+  const { activities } = props;
+  const navigation = useNavigation();
 
-      if (!yearDates.dates.includes(current.date)) {
-        yearDates.dates.push(current.date);
-        yearDates.byDate[current.date] = [current];
-      } else {
-        yearDates.byDate[current.date].push(current);
-      }
+  const sectionListData = useMemo(() => {
+    const data = activityLib.groupActivitiesByDate(activities);
 
-      result.byYear[year] = yearDates;
-    }
-    return result;
-  },
-  { byYear: {}, years: [] },
-);
+    return data.years.map((year) => ({
+      data: [data.byYear[year]],
+      year,
+    }));
+  }, [activities]);
 
-export default function Timeline() {
+  const handleNavigateToActivity = (activityId: string) => {
+    navigation.navigate('Activity', { activityId, mode: 'view' });
+  };
+
+  const handleUpdateActivity = (activityId: string) => {
+    navigation.navigate('Activity', { activityId, mode: 'update' });
+  };
+
   return (
     <>
       <SectionList
-        renderItem={({ item, section }) => {
+        renderItem={(listItem) => {
+          const { item, section } = listItem;
           const { byDate, dates } = item;
 
           return (
@@ -79,9 +59,48 @@ export default function Timeline() {
                     </View>
                     <View style={styles.activitiesGroup}>
                       {activitiesByDate.map((activity) => (
-                        <View style={styles.activity}>
-                          <Txt key={activity.id}>{activity.category}</Txt>
-                        </View>
+                        <HorizontalSwipeView
+                          key={activity.id}
+                          config={{ isRightSwipeDisabled: true }}
+                          renderRightElement={({ resetSwipedState }) => (
+                            <View style={styles.listItemActionsContainer}>
+                              <TouchableOpacity
+                                accessibilityLabel="Edit item"
+                                style={styles.listItemActionButton}
+                                onPress={() => {
+                                  resetSwipedState();
+                                  handleUpdateActivity(activity.id);
+                                }}
+                              >
+                                <Icon name="pencil" size={20} />
+                              </TouchableOpacity>
+                              <ActivityDeleteDecorator>
+                                {(handleDeleteActivity) => (
+                                  <TouchableOpacity
+                                    accessibilityLabel="Delete item"
+                                    style={styles.listItemActionButton}
+                                    onPress={() => {
+                                      handleDeleteActivity(activity.id, () => {
+                                        resetSwipedState();
+                                      });
+                                    }}
+                                  >
+                                    <Icon name="trash" size={20} />
+                                  </TouchableOpacity>
+                                )}
+                              </ActivityDeleteDecorator>
+                            </View>
+                          )}
+                          style={styles.listItem}
+                          onPress={() => handleNavigateToActivity(activity.id)}
+                        >
+                          <View style={styles.activity}>
+                            <Txt>
+                              {categoryLib.findCategoryById(activity.categoryId)
+                                ?.name || 'N/A'}
+                            </Txt>
+                          </View>
+                        </HorizontalSwipeView>
                       ))}
                     </View>
                   </View>
@@ -93,10 +112,7 @@ export default function Timeline() {
         renderSectionHeader={({ section }) => (
           <Txt style={styles.sectionHeader}>{section.year}</Txt>
         )}
-        sections={groupedData.years.map((year) => ({
-          data: [groupedData.byYear[year]],
-          year,
-        }))}
+        sections={sectionListData}
       />
     </>
   );
@@ -119,6 +135,19 @@ const styles = StyleSheet.create({
   },
   groupHeader: {
     fontSize: 24,
+  },
+  listItem: {
+    zIndex: 10,
+  },
+  listItemActionButton: {
+    padding: 10,
+  },
+  listItemActionsContainer: {
+    flexDirection: 'row',
+    paddingHorizontal: 10,
+    position: 'absolute',
+    right: 0,
+    zIndex: 5,
   },
   section: {
     marginBottom: 10,
