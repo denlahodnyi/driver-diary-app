@@ -1,6 +1,6 @@
 import { MMKV, useMMKVString } from 'react-native-mmkv';
 
-type StringKeys = 'selectedVehicleId';
+type StringKeys = 'selectedVehicleId' | 'currencyCode';
 type NumberKeys = never;
 type BooleanKeys = never;
 type BufferKeys = never;

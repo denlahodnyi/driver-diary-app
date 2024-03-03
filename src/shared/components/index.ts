@@ -6,9 +6,11 @@ export {
 export { default as Icon, type IconProps } from './Icon';
 export { default as HorizontalSwipeView } from './HorizontalSwipeView';
 export {
-  CurrencyInput,
+  CostInput,
   HeadlessInput,
   type HeadlessInputProps,
   Input,
   maskCurrency,
+  SelectInput,
+  CurrencySelect,
 } from './inputs';

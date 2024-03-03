@@ -57,7 +57,7 @@ function ActivitiesNavigator() {
         name="Bookmarks"
         options={{
           tabBarAccessibilityLabel: 'Bookmarks',
-          tabBarIcon: () => <Icon name="bookmark" size={30} />,
+          tabBarIcon: () => <Icon name="bookmarks" size={30} />,
         }}
       />
       <Tab.Screen

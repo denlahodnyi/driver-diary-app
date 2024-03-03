@@ -10,9 +10,20 @@ import PickerSelect from 'react-native-picker-select';
 import { KeyboardAwareScrollView } from '@pietile-native-kit/keyboard-aware-scrollview';
 import type { RootStackScreenProps } from '~/app/navigation/types';
 import { buttonBase, buttonBaseText, screenPaddings } from '~/app/styles';
-import { COMMENT_LENGTH, LOCATION_LENGTH } from '~/app/constants';
+import {
+  COMMENT_LENGTH,
+  CURRENCY_CODE,
+  LOCATION_LENGTH,
+} from '~/app/constants';
 import { useStorageString } from '~/app/storage';
-import { CurrencyInput, Input, Txt, maskCurrency } from '~/shared/components';
+import {
+  CostInput,
+  CurrencySelect,
+  Icon,
+  Input,
+  Txt,
+  maskCurrency,
+} from '~/shared/components';
 import { ActivityDeleteDecorator } from '~/features/activities/delete';
 import { activityLib, activityModel } from '~/entities/activity';
 import { categoryLib } from '~/entities/category';
@@ -21,13 +32,12 @@ import type { Activity as ActivityModel } from 'db';
 type Form = {
   comment: string;
   cost: string;
+  currencyCode: string;
   date: Date;
   location: string;
   subcategoryId: string | null;
   subcategoryName: string;
 };
-
-// TODO: add ability to bookmark
 
 export default function Activity(props: RootStackScreenProps<'Activity'>) {
   const { navigation, route } = props;
@@ -36,6 +46,7 @@ export default function Activity(props: RootStackScreenProps<'Activity'>) {
   const newCategoryId = mode !== 'view' ? route.params?.newCategoryId : null;
 
   const [vehicleId] = useStorageString('selectedVehicleId');
+  const [userCurrencyCode] = useStorageString('currencyCode');
   const [activityData] = activityModel.useActivityById(activityId);
   const [createActivity] = activityModel.useCreateActivity();
   const [updateActivity] = activityModel.useUpdateActivity();
@@ -44,6 +55,7 @@ export default function Activity(props: RootStackScreenProps<'Activity'>) {
   const [form, setForm] = useState<Form>({
     comment: '',
     cost: '0',
+    currencyCode: userCurrencyCode || CURRENCY_CODE,
     date: new Date(),
     location: '',
     subcategoryId: null,
@@ -74,6 +86,7 @@ export default function Activity(props: RootStackScreenProps<'Activity'>) {
         cost: record.cost
           ? activityLib.convertCostFromMinorUnits(record.cost).toString()
           : '0',
+        currencyCode: record.currencyCode || userCurrencyCode || CURRENCY_CODE,
         date: new Date(record.date),
         location: record.location || '',
         subcategoryId: record.subcategoryId || null,
@@ -85,7 +98,7 @@ export default function Activity(props: RootStackScreenProps<'Activity'>) {
             : '',
       };
     },
-    [selectedCategory],
+    [selectedCategory, userCurrencyCode],
   );
 
   const adaptFormDataToRecord = (formData: Form) => ({
@@ -204,13 +217,23 @@ export default function Activity(props: RootStackScreenProps<'Activity'>) {
             }}
           />
         </View>
-        <View style={styles.section}>
-          <CurrencyInput
+        <View style={[styles.section, { flexDirection: 'row', gap: 20 }]}>
+          <CostInput
+            containerProps={{ style: { flex: 1 } }}
             label="Cost"
             value={form.cost}
             onChangeText={(cost, rawCost) => {
               setForm((prev) => ({ ...prev, cost: rawCost }));
             }}
+          />
+          <CurrencySelect
+            containerProps={{ style: { flex: 1 } }}
+            label="Currency"
+            placeholder={{}}
+            value={form.currencyCode}
+            onValueChange={(currencyCode) =>
+              setForm((prev) => ({ ...prev, currencyCode }))
+            }
           />
         </View>
         <View style={styles.section}>
@@ -271,13 +294,29 @@ export default function Activity(props: RootStackScreenProps<'Activity'>) {
       {form.subcategoryName && (
         <Txt style={styles.subTitle}>{form.subcategoryName}</Txt>
       )}
+      <View style={[styles.section, { alignItems: 'center' }]}>
+        <TouchableOpacity
+          accessibilityLabel="Toggle bookmark"
+          style={styles.bookmarkButton}
+          onPress={() => {
+            activityData?.toggleBookmark();
+          }}
+        >
+          <Icon
+            name={activityData?.isBookmark ? 'bookmark' : 'bookmark-outline'}
+            size={50}
+          />
+        </TouchableOpacity>
+      </View>
       <View style={styles.section}>
         <Txt style={styles.text}>{form.date.toLocaleDateString()}</Txt>
       </View>
       {Number(form.cost) > 0 && (
         <View style={styles.section}>
           <Txt style={[styles.text, styles.sectionLabel]}>Cost</Txt>
-          <Txt style={styles.text}>{maskCurrency(form.cost)}</Txt>
+          <Txt style={styles.text}>
+            {maskCurrency(form.cost, { currencyCode: form.currencyCode })}
+          </Txt>
         </View>
       )}
       {form.location && (
@@ -325,6 +364,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 6,
     justifyContent: 'center',
+  },
+  bookmarkButton: {
+    ...buttonBase,
   },
   deleteButton: {
     ...buttonBase,
