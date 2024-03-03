@@ -1,4 +1,7 @@
-import { type TextInputProps } from 'react-native';
+import PickerSelect, {
+  type PickerSelectProps,
+} from 'react-native-picker-select';
+import { toArray } from '~/shared/utils';
 import {
   inputBaseContainer,
   inputBaseError,
@@ -6,18 +9,15 @@ import {
   inputBaseInputWrapper,
   inputBaseLabel,
 } from '~/app/styles';
-import { toArray } from '~/shared/utils';
 import HeadlessInput, { type HeadlessInputProps } from './HeadlessInput';
 
-export type InputProps<T extends object = TextInputProps> =
-  HeadlessInputProps<T>;
+export type SelectInputProps = HeadlessInputProps<PickerSelectProps>;
 
-export default function Input<T extends TextInputProps = TextInputProps>(
-  props: InputProps<T>,
-) {
+export default function SelectInput(props: SelectInputProps) {
   return (
-    <HeadlessInput
+    <HeadlessInput<PickerSelectProps>
       {...props}
+      InputComponent={PickerSelect}
       containerProps={{
         style: [inputBaseContainer, ...toArray(props.containerProps?.style)],
       }}
@@ -33,7 +33,16 @@ export default function Input<T extends TextInputProps = TextInputProps>(
       labelProps={{
         style: [inputBaseLabel, ...toArray(props.labelProps?.style)],
       }}
-      style={[inputBaseInput, ...toArray(props?.style)]}
+      style={{
+        inputAndroid: {
+          ...inputBaseInput,
+          ...props.style,
+        },
+        inputIOS: {
+          ...inputBaseInput,
+          ...props.style,
+        },
+      }}
     />
   );
 }

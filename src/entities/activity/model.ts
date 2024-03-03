@@ -53,7 +53,14 @@ const [useObservedActivities] = bind(
     return db.get<Vehicle>('vehicles').find(vehicleId);
   }).pipe(
     switchMap((vehicle) =>
-      vehicle.activities.observe().pipe(map((data) => ({ data, error: null }))),
+      vehicle.sortedActivities
+        .observeWithColumns([
+          'is_bookmark',
+          'date',
+          'category_id',
+          'subcategory_id',
+        ])
+        .pipe(map((data) => ({ data, error: null }))),
     ),
     catchError((error: Error) =>
       of({

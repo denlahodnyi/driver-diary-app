@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
+import { catchError, iif, map, of } from 'rxjs';
 import { bind } from '@react-rxjs/core';
 import { ValidationError } from '~/shared/classes';
 import { buildActionHookResult, formatError } from '~/shared/utils';
 import type { ActionHookReturn, DataHookReturn, TError } from '~/shared/types';
-import { storage } from '~/app/storage';
+import { storage, useStorageString } from '~/app/storage';
 import { GENERAL_ERROR_MESSAGE } from '~/app/constants';
 import { Database, type Vehicle } from 'db';
 
@@ -48,10 +49,38 @@ function getSavedVehicleId() {
   return savedVehicle ? JSON.parse(savedVehicle) : null;
 }
 
+const [useObservedVehicle] = bind(
+  (vehicleId: string | null) => {
+    return iif(
+      () => !!vehicleId,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      db.get<Vehicle>('vehicles').findAndObserve(vehicleId!),
+      of(null),
+    ).pipe(
+      map((data) => ({ data, error: null })),
+      catchError((error: Error) =>
+        of({
+          data: null,
+          error: error instanceof Error ? error.message : error,
+        }),
+      ),
+    );
+  },
+  { data: null, error: null },
+);
+
 function useVehicles() {
   const data = useObservedVehicles();
 
   return [data] as const;
+}
+
+function useCurrentVehicle() {
+  // ! useStorageString is not reactive
+  const [vehicleId] = useStorageString('selectedVehicleId');
+  const { data, error } = useObservedVehicle(vehicleId || null);
+
+  return [data, { error }] as const;
 }
 
 function useVehicleById(id: string | null) {
@@ -215,6 +244,7 @@ export {
   getVehicleById,
   getSavedVehicleId,
   saveVehicleIdToStorage,
+  useCurrentVehicle,
   useCreateVehicle,
   useDeleteVehicle,
   useUpdateVehicle,

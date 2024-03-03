@@ -1,11 +1,23 @@
 /* eslint-disable sort-keys */
 import {
+  addColumns,
   createTable,
   schemaMigrations,
 } from '@nozbe/watermelondb/Schema/migrations';
 
 export default schemaMigrations({
   migrations: [
+    {
+      toVersion: 3,
+      steps: [
+        addColumns({
+          table: 'activities',
+          columns: [
+            { name: 'currency_code', type: 'string', isOptional: true },
+          ],
+        }),
+      ],
+    },
     {
       toVersion: 2,
       steps: [

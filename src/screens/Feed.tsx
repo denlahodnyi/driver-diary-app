@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View } from 'react-native';
-import { card, screenPaddings } from '~/app/styles';
+import { StyleSheet, View } from 'react-native';
+import { screenPaddings } from '~/app/styles';
 import { ActivitiesToolbar, Timeline } from '~/widgets/activities/feed';
 import { activityModel } from '~/entities/activity';
 import { Txt } from '~/shared/components';
@@ -9,7 +9,7 @@ export default function Feed() {
   // TODO: return to Vehicles if no saved vehicle were found
   console.log(`🚀 -> Timeline -> activities:`, activities);
 
-  if (!activities.length) {
+  if (!activities?.length) {
     return (
       <View style={[screenPaddings, styles.screenCentered]}>
         <View style={styles.floatingToolbarContainer}>

@@ -12,7 +12,11 @@ type TimelineProps = {
   activities: Activity[];
 };
 
-// TODO: sort by date
+const dateTimeFormat = new Intl.DateTimeFormat('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: '2-digit',
+});
 
 export default function Timeline(props: TimelineProps) {
   const { activities } = props;
@@ -44,13 +48,17 @@ export default function Timeline(props: TimelineProps) {
 
           return (
             <View key={section.year} style={styles.section}>
-              {/* <Txt style={styles.sectionHeader}>{year}</Txt> */}
               {dates.map((date) => {
                 const activitiesByDate = byDate[date];
                 const dateObj = new Date(date);
-                const formattedDate = `${dateObj.getDate()}.${
-                  dateObj.getMonth() + 1
-                }`;
+                const formattedDate = dateTimeFormat
+                  .formatToParts(dateObj)
+                  .reduce<string>((prev, part) => {
+                    if (part.type === 'day') return `${part.value}${prev}`;
+                    else if (part.type === 'month')
+                      return `${prev} ${part.value}`;
+                    return prev;
+                  }, '');
 
                 return (
                   <View key={date} style={styles.group}>
@@ -58,50 +66,98 @@ export default function Timeline(props: TimelineProps) {
                       <Txt style={styles.groupHeader}>{formattedDate}</Txt>
                     </View>
                     <View style={styles.activitiesGroup}>
-                      {activitiesByDate.map((activity) => (
-                        <HorizontalSwipeView
-                          key={activity.id}
-                          config={{ isRightSwipeDisabled: true }}
-                          renderRightElement={({ resetSwipedState }) => (
-                            <View style={styles.listItemActionsContainer}>
-                              <TouchableOpacity
-                                accessibilityLabel="Edit item"
-                                style={styles.listItemActionButton}
-                                onPress={() => {
-                                  resetSwipedState();
-                                  handleUpdateActivity(activity.id);
-                                }}
-                              >
-                                <Icon name="pencil" size={20} />
-                              </TouchableOpacity>
-                              <ActivityDeleteDecorator>
-                                {(handleDeleteActivity) => (
+                      {activitiesByDate.map((activity) => {
+                        const category = categoryLib.findCategoryById(
+                          activity.categoryId,
+                        );
+                        const subcategoryName =
+                          activity.subcategoryId && category
+                            ? category.subcategories.find(
+                                (sc) => sc.id === activity.subcategoryId,
+                              )?.name
+                            : null;
+
+                        return (
+                          <View
+                            key={activity.id}
+                            style={styles.activityItemContainer}
+                          >
+                            <HorizontalSwipeView
+                              config={{ isRightSwipeDisabled: true }}
+                              renderRightElement={({ resetSwipedState }) => (
+                                <View
+                                  style={styles.activityItemActionsContainer}
+                                >
                                   <TouchableOpacity
-                                    accessibilityLabel="Delete item"
-                                    style={styles.listItemActionButton}
+                                    accessibilityLabel={
+                                      activity.isBookmark
+                                        ? 'Remove bookmark'
+                                        : 'Save as bookmark'
+                                    }
+                                    style={styles.activityItemActionButton}
                                     onPress={() => {
-                                      handleDeleteActivity(activity.id, () => {
-                                        resetSwipedState();
-                                      });
+                                      resetSwipedState();
+                                      activity.toggleBookmark();
                                     }}
                                   >
-                                    <Icon name="trash" size={20} />
+                                    <Icon name="bookmark" size={20} />
                                   </TouchableOpacity>
+                                  <TouchableOpacity
+                                    accessibilityLabel="Edit item"
+                                    style={styles.activityItemActionButton}
+                                    onPress={() => {
+                                      resetSwipedState();
+                                      handleUpdateActivity(activity.id);
+                                    }}
+                                  >
+                                    <Icon name="pencil" size={20} />
+                                  </TouchableOpacity>
+                                  <ActivityDeleteDecorator>
+                                    {(handleDeleteActivity) => (
+                                      <TouchableOpacity
+                                        accessibilityLabel="Delete item"
+                                        style={styles.activityItemActionButton}
+                                        onPress={() => {
+                                          handleDeleteActivity(
+                                            activity.id,
+                                            () => {
+                                              resetSwipedState();
+                                            },
+                                          );
+                                        }}
+                                      >
+                                        <Icon name="trash" size={20} />
+                                      </TouchableOpacity>
+                                    )}
+                                  </ActivityDeleteDecorator>
+                                </View>
+                              )}
+                              style={styles.activityItem}
+                              onPress={() =>
+                                handleNavigateToActivity(activity.id)
+                              }
+                            >
+                              <View>
+                                <Txt style={styles.activityTitle}>
+                                  {category?.name || 'N/A'}
+                                </Txt>
+                                {subcategoryName && (
+                                  <Txt style={styles.activitySubtitle}>
+                                    {subcategoryName}
+                                  </Txt>
                                 )}
-                              </ActivityDeleteDecorator>
-                            </View>
-                          )}
-                          style={styles.listItem}
-                          onPress={() => handleNavigateToActivity(activity.id)}
-                        >
-                          <View style={styles.activity}>
-                            <Txt>
-                              {categoryLib.findCategoryById(activity.categoryId)
-                                ?.name || 'N/A'}
-                            </Txt>
+                              </View>
+                              {activity.isBookmark && (
+                                <Icon
+                                  name="bookmark"
+                                  size={18}
+                                  style={styles.bookmark}
+                                />
+                              )}
+                            </HorizontalSwipeView>
                           </View>
-                        </HorizontalSwipeView>
-                      ))}
+                        );
+                      })}
                     </View>
                   </View>
                 );
@@ -123,31 +179,48 @@ const styles = StyleSheet.create({
     // width: '100%',
     flex: 1,
   },
-  activity: {
+  activityItem: {
     ...card,
-    marginBottom: 6,
     paddingHorizontal: 16,
     paddingVertical: 10,
     width: '100%',
+    zIndex: 10,
+  },
+  activityItemActionButton: {
+    padding: 10,
+  },
+  activityItemActionsContainer: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    paddingHorizontal: 10,
+    position: 'absolute',
+    right: 0,
+    zIndex: 5,
+  },
+  activityItemContainer: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    marginBottom: 6,
+    position: 'relative',
+    width: '100%',
+  },
+  activitySubtitle: {
+    color: 'grey',
+    fontSize: 16,
+  },
+  activityTitle: {
+    fontSize: 18,
+  },
+  bookmark: {
+    position: 'absolute',
+    right: 10,
+    top: -2,
   },
   group: {
     // flexDirection: 'row',
   },
   groupHeader: {
     fontSize: 24,
-  },
-  listItem: {
-    zIndex: 10,
-  },
-  listItemActionButton: {
-    padding: 10,
-  },
-  listItemActionsContainer: {
-    flexDirection: 'row',
-    paddingHorizontal: 10,
-    position: 'absolute',
-    right: 0,
-    zIndex: 5,
   },
   section: {
     marginBottom: 10,
