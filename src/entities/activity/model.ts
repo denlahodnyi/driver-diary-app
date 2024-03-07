@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { catchError, defer, iif, map, of, switchMap } from 'rxjs';
+import { Q } from '@nozbe/watermelondb';
+import { catchError, iif, map, of, switchMap } from 'rxjs';
 import { bind } from '@react-rxjs/core';
-import { storage } from '~/app/storage';
+import { useStorageString } from '~/app/storage';
 import {
   COMMENT_LENGTH,
   GENERAL_ERROR_MESSAGE,
@@ -42,33 +43,52 @@ async function getActivityById(id: string) {
   return await db.get<Activity>('activities').find(id);
 }
 
+type ActivitiesOptions = {
+  categoryIds: string[];
+  endDate: null | Date;
+  startDate: null | Date;
+};
+
 const [useObservedActivities] = bind(
-  defer(() => {
-    const vehicleId = storage.getString('selectedVehicleId');
+  (vehicleId: string | null, options: ActivitiesOptions) => {
+    return iif(
+      () => !!vehicleId,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      db.get<Vehicle>('vehicles').findAndObserve(vehicleId!),
+      of(null),
+    ).pipe(
+      switchMap((vehicle) => {
+        const { categoryIds, endDate, startDate } = options;
 
-    if (!vehicleId) {
-      throw new Error('No selected vehicle found');
-    }
+        if (!vehicle) return of(null);
 
-    return db.get<Vehicle>('vehicles').find(vehicleId);
-  }).pipe(
-    switchMap((vehicle) =>
-      vehicle.sortedActivities
-        .observeWithColumns([
+        let query = vehicle.sortedActivities;
+
+        if (startDate) {
+          query = query.extend(Q.where('date', Q.gt(startDate.valueOf())));
+        }
+        if (endDate) {
+          query = query.extend(Q.where('date', Q.lt(endDate.valueOf())));
+        }
+        if (categoryIds.length) {
+          query = query.extend(Q.where('category_id', Q.oneOf(categoryIds)));
+        }
+        return query.observeWithColumns([
           'is_bookmark',
           'date',
           'category_id',
           'subcategory_id',
-        ])
-        .pipe(map((data) => ({ data, error: null }))),
-    ),
-    catchError((error: Error) =>
-      of({
-        data: null,
-        error: error instanceof Error ? error.message : error,
+        ]);
       }),
-    ),
-  ),
+      map((data) => ({ data, error: null })),
+      catchError((error: Error) =>
+        of({
+          data: null,
+          error: error instanceof Error ? error.message : error,
+        }),
+      ),
+    );
+  },
   { data: [], error: null },
 );
 
@@ -93,9 +113,15 @@ const [useObservedActivity] = bind(
 );
 
 function useActivities() {
-  const { data, error } = useObservedActivities();
+  const [options, setOptions] = useState<ActivitiesOptions>({
+    categoryIds: [],
+    endDate: null,
+    startDate: null,
+  });
+  const [vehicleId] = useStorageString('selectedVehicleId');
+  const { data, error } = useObservedActivities(vehicleId || null, options);
 
-  return [data, { error }] as const;
+  return [data, { error, options, setOptions }] as const;
 }
 
 function useActivityById(activityId: string | null) {

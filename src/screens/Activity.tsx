@@ -11,6 +11,7 @@ import { KeyboardAwareScrollView } from '@pietile-native-kit/keyboard-aware-scro
 import type { RootStackScreenProps } from '~/app/navigation/types';
 import { buttonBase, buttonBaseText, screenPaddings } from '~/app/styles';
 import {
+  APP_MIN_DATE_STR,
   COMMENT_LENGTH,
   CURRENCY_CODE,
   LOCATION_LENGTH,
@@ -28,6 +29,8 @@ import { ActivityDeleteDecorator } from '~/features/activities/delete';
 import { activityLib, activityModel } from '~/entities/activity';
 import { categoryLib } from '~/entities/category';
 import type { Activity as ActivityModel } from 'db';
+
+const MIN_DATE = new Date(APP_MIN_DATE_STR);
 
 type Form = {
   comment: string;
@@ -182,7 +185,7 @@ export default function Activity(props: RootStackScreenProps<'Activity'>) {
             {selectedCategory?.name}
           </Txt>
         </TouchableWithoutFeedback>
-        {selectedCategory && (
+        {selectedCategory && !!selectedCategory.subcategories.length && (
           <PickerSelect
             items={selectedCategory.subcategories}
             placeholder={{ label: 'Select subcategory', value: null }}
@@ -206,6 +209,8 @@ export default function Activity(props: RootStackScreenProps<'Activity'>) {
           <DatePicker
             modal
             date={form.date}
+            maximumDate={new Date()}
+            minimumDate={MIN_DATE}
             mode="date"
             open={isDatePickerOpen}
             onCancel={() => {

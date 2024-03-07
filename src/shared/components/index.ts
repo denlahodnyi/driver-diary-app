@@ -14,3 +14,4 @@ export {
   SelectInput,
   CurrencySelect,
 } from './inputs';
+export { Modalka } from './modals';
