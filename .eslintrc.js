@@ -14,10 +14,11 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 2021,
-    project: ['./tsconfig.json'],
+    project: ['./tsconfig.json', './tsconfig.spec.json'],
+    tsconfigRootDir: __dirname,
   },
   // Ignore ESlint config to fix that issue – https://typescript-eslint.io/linting/troubleshooting/#i-get-errors-telling-me-eslint-was-configured-to-run--however-that-tsconfig-does-not--none-of-those-tsconfigs-include-this-file
-  ignorePatterns: ['/.eslintrc.js'],
+  ignorePatterns: ['/.eslintrc.js', '/babel.config.js'],
   settings: {
     'import/ignore': ['react-native'],
     'import/parsers': {
@@ -31,9 +32,7 @@ module.exports = {
       },
     },
   },
-  env: {
-    // 'jest/globals': true,
-  },
+  env: {},
   overrides: [
     {
       files: [
@@ -75,7 +74,12 @@ module.exports = {
     ],
     // import
     'import/no-cycle': 1,
-    'import/no-unresolved': 2,
+    'import/no-unresolved': [
+      2,
+      {
+        ignore: ['@env$'],
+      },
+    ],
     'import/newline-after-import': 2,
     'import/first': 2,
     'import/order': [

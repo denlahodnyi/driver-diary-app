@@ -2,9 +2,13 @@ import { useState } from 'react';
 import { Q } from '@nozbe/watermelondb';
 import { catchError, iif, map, of, switchMap } from 'rxjs';
 import { bind } from '@react-rxjs/core';
-import { useStorageString } from '~/app/storage';
+import { groupBy } from 'lodash';
+import dayjs from 'dayjs';
+import { storage, useStorageString } from '~/app/storage';
 import {
   COMMENT_LENGTH,
+  CURRENCY_CODE,
+  CURRENCY_MINOR_UNITS,
   GENERAL_ERROR_MESSAGE,
   LOCATION_LENGTH,
 } from '~/app/constants';
@@ -13,6 +17,7 @@ import type { ActionHookReturn, TError } from '~/shared/types';
 import { ValidationError } from '~/shared/classes';
 import { type Activity, Database, type Vehicle } from 'db';
 import { getVehicleById } from '../vehicle/model';
+import { categoryLib } from '../category';
 
 const db = Database.getInstance();
 
@@ -41,6 +46,217 @@ async function getActivities() {
 
 async function getActivityById(id: string) {
   return await db.get<Activity>('activities').find(id);
+}
+
+type CostReportDataItem = {
+  currencyCode: string;
+  day: string;
+  hours: string;
+  month: string;
+  totalCost: number;
+  totalCostConverted: number;
+  year: string;
+};
+type CostReport = {
+  byCurrencyCode: Record<string, CostReportDataItem[]>;
+  currencyCodes: string[];
+};
+
+const yearColumnName = 'year';
+const monthColumnName = 'month';
+const dayColumnName = 'day';
+const hoursColumnName = 'hours';
+
+const getSqlDatePartColumnForSelect = (
+  datePart: 'year' | 'month' | 'day' | 'hours',
+) => {
+  let formatStr = '%Y';
+  let columnName = yearColumnName;
+
+  switch (datePart) {
+    case 'month': {
+      formatStr = '%m';
+      columnName = monthColumnName;
+      break;
+    }
+    case 'day': {
+      formatStr = '%d';
+      columnName = dayColumnName;
+      break;
+    }
+    case 'hours': {
+      formatStr = '%H';
+      columnName = hoursColumnName;
+      break;
+    }
+    default:
+      break;
+  }
+  return `strftime('${formatStr}', datetime(date / 1000, 'unixepoch')) AS ${columnName}`;
+};
+
+async function getCostAnalysis(options?: {
+  categoryIds: string[];
+  dateEnd: Date | null;
+  dateStart: Date | null;
+}): Promise<CostReport | undefined> {
+  const { categoryIds, dateEnd, dateStart } = options || {
+    categoryIds: [],
+    dateEnd: null,
+    dateStart: null,
+  };
+  const vehicleId = storage.getString('selectedVehicleId');
+
+  if (vehicleId) {
+    const start = dateStart;
+    const end = dateStart ? dateEnd || new Date() : dateEnd || null;
+    const yearColumn = getSqlDatePartColumnForSelect('year');
+    let monthColumn = getSqlDatePartColumnForSelect('month');
+    let dayColumn = getSqlDatePartColumnForSelect('day');
+    let hoursColumn = getSqlDatePartColumnForSelect('hours');
+
+    if (start && end) {
+      if (dayjs(end).diff(start, 'years') >= 3) {
+        // select only year column
+        monthColumn = `NULL AS ${monthColumnName}`;
+        dayColumn = `NULL AS ${dayColumnName}`;
+        hoursColumn = `NULL AS ${hoursColumnName}`;
+      } else if (dayjs(end).diff(start, 'months') > 1) {
+        // select only year and month columns
+        dayColumn = `NULL AS ${dayColumnName}`;
+        hoursColumn = `NULL AS ${hoursColumnName}`;
+      } else if (dayjs(end).diff(start, 'days') > 3) {
+        // select only year, month and day columns
+        hoursColumn = `NULL AS ${hoursColumnName}`;
+      }
+    } else {
+      monthColumn = `NULL AS ${monthColumnName}`;
+      dayColumn = `NULL AS ${dayColumnName}`;
+      hoursColumn = `NULL AS ${hoursColumnName}`;
+    }
+
+    const columnsToSelect = [yearColumn, monthColumn, dayColumn, hoursColumn];
+    const columnsToGroupBy = [yearColumnName];
+
+    if (!monthColumn.includes('NULL')) {
+      columnsToGroupBy.push(monthColumnName);
+    }
+    if (!dayColumn.includes('NULL')) {
+      columnsToGroupBy.push(dayColumnName);
+    }
+    if (!hoursColumn.includes('NULL')) {
+      columnsToGroupBy.push(hoursColumnName);
+    }
+
+    let datesFilterCondition = '';
+
+    if (start && end) {
+      datesFilterCondition = `AND "date" BETWEEN ${start.valueOf()} AND ${end.valueOf()}`;
+    } else if (end) {
+      datesFilterCondition = `AND "date" <= ${end.valueOf()}`;
+    }
+
+    let categoryFilterCondition = '';
+
+    if (categoryIds.length) {
+      const ids = categoryIds.map((id) => `"${id}"`).join(',');
+
+      categoryFilterCondition = `AND category_id IN (${ids})`;
+    }
+
+    const query = db.get<Activity>('activities').query(
+      Q.unsafeSqlQuery(
+        `SELECT ${columnsToSelect.join(', ')},
+                SUM(cost) AS totalCost,
+                SUM(cost) / ${CURRENCY_MINOR_UNITS} AS totalCostConverted,
+                currency_code AS currencyCode
+          FROM activities
+          WHERE vehicle_id = ?
+                AND cost > 0
+                ${datesFilterCondition}
+                ${categoryFilterCondition}
+          GROUP BY
+          currencyCode,
+          ${columnsToGroupBy.join(', ')}`,
+        [vehicleId],
+      ),
+    );
+
+    const result: CostReportDataItem[] = await query.unsafeFetchRaw();
+    const grouped = groupBy(result, (o) => o.currencyCode);
+
+    return { byCurrencyCode: grouped, currencyCodes: Object.keys(grouped) };
+  }
+}
+
+type CategoriesReportDataItem = {
+  categoryId: string;
+  total: number;
+};
+type CategoriesReport = (CategoriesReportDataItem & {
+  categoryName: string | null;
+})[];
+
+async function getCategoriesAnalysis(options?: {
+  categoryIds: string[];
+  dateEnd: Date | null;
+  dateStart: Date | null;
+}): Promise<CategoriesReport | undefined> {
+  const {
+    categoryIds,
+    dateEnd: end,
+    dateStart: start,
+  } = options || {
+    categoryIds: [],
+    dateEnd: null,
+    dateStart: null,
+  };
+  const vehicleId = storage.getString('selectedVehicleId');
+
+  let datesFilterCondition = '';
+
+  if (start && end) {
+    datesFilterCondition = `"date" BETWEEN ${start.valueOf()} AND ${end.valueOf()}`;
+  } else if (end) {
+    datesFilterCondition = `"date" <= ${end.valueOf()}`;
+  } else if (start) {
+    datesFilterCondition = `"date" >= ${start.valueOf()}`;
+  }
+
+  let categoryFilterCondition = '';
+
+  if (categoryIds.length) {
+    const ids = categoryIds.map((id) => `"${id}"`).join(',');
+
+    categoryFilterCondition = `category_id IN (${ids})`;
+  }
+
+  if (vehicleId) {
+    const query = db.get<Activity>('activities').query(
+      Q.unsafeSqlQuery(
+        `SELECT category_id AS categoryId, COUNT(category_id) AS total
+          FROM activities
+          ${
+            datesFilterCondition || categoryFilterCondition
+              ? `WHERE ${datesFilterCondition} ${
+                  categoryFilterCondition && datesFilterCondition
+                    ? `AND ${categoryFilterCondition}`
+                    : categoryFilterCondition
+                }`
+              : ''
+          }
+          GROUP BY categoryId
+          ORDER BY total DESC`,
+      ),
+    );
+
+    const result: CategoriesReportDataItem[] = await query.unsafeFetchRaw();
+
+    return result.map((c) => ({
+      ...c,
+      categoryName: categoryLib.findCategoryById(c.categoryId)?.name || null,
+    }));
+  }
 }
 
 type ActivitiesOptions = {
@@ -138,6 +354,7 @@ function useCreateActivity() {
     categoryId,
     comment,
     cost,
+    currencyCode,
     date,
     location,
     subcategoryId,
@@ -145,6 +362,7 @@ function useCreateActivity() {
   }: {
     comment?: Activity['comment'];
     cost?: Activity['cost'];
+    currencyCode?: Activity['currencyCode'];
     location?: Activity['location'];
     subcategoryId?: Activity['subcategoryId'];
     categoryId: Activity['categoryId'];
@@ -166,6 +384,7 @@ function useCreateActivity() {
           record.subcategoryId = subcategoryId || null;
           record.location = location || null;
           record.cost = cost || null;
+          record.currencyCode = currencyCode || CURRENCY_CODE;
           record.isBookmark = false;
           record.vehicles.set(vehicle);
         });
@@ -197,6 +416,7 @@ function useUpdateActivity() {
     categoryId,
     comment,
     cost,
+    currencyCode,
     date,
     id,
     isBookmark,
@@ -206,6 +426,7 @@ function useUpdateActivity() {
     categoryId?: Activity['categoryId'];
     comment?: Activity['comment'];
     cost?: Activity['cost'];
+    currencyCode?: Activity['currencyCode'];
     date?: Activity['date'];
     isBookmark?: Activity['isBookmark'];
     location?: Activity['location'];
@@ -225,6 +446,7 @@ function useUpdateActivity() {
           record.date = date || record.date;
           record.categoryId = categoryId || record.categoryId;
           record.cost = cost || record.cost;
+          record.currencyCode = currencyCode || record.currencyCode;
           record.location = location == null ? record.location : location;
           record.isBookmark = isBookmark || record.isBookmark;
           record.subcategoryId =
@@ -286,9 +508,15 @@ function useDeleteActivity() {
 export {
   getActivities,
   getActivityById,
+  getCategoriesAnalysis,
+  getCostAnalysis,
   useActivities,
   useActivityById,
   useCreateActivity,
   useUpdateActivity,
   useDeleteActivity,
+  type CostReport,
+  type CostReportDataItem,
+  type CategoriesReport,
+  type CategoriesReportDataItem,
 };

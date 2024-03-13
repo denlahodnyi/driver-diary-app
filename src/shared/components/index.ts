@@ -13,5 +13,7 @@ export {
   maskCurrency,
   SelectInput,
   CurrencySelect,
+  CategoriesSelect,
 } from './inputs';
 export { Modalka } from './modals';
+export { RangeDatePicker, type RangeDatePickerProps } from './dates';

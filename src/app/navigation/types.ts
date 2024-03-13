@@ -8,11 +8,13 @@ import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 
 export type RootStackParamsList = {
   Activities: NavigatorScreenParams<ActivitiesTabsParamsList>;
+  ActivitiesStats: undefined;
   Activity:
     | { activityId: string; mode: 'view' }
     | { mode: 'create'; newCategoryId: string }
     | { newCategoryId?: string; activityId: string; mode: 'update' };
   Categories: { mode: 'create' } | { activityId: string; mode: 'update' };
+  ExpenditureStats: undefined;
   Settings: undefined;
   Vehicle: { vehicleId: string } | undefined;
   Vehicles: undefined;

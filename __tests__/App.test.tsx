@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react-native';
 import { Database as WatermelonDb } from '@nozbe/watermelondb';
-import App from '~/App';
+import App from '~/App.main';
 
 jest.mock('db');
 

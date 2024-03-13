@@ -1,14 +1,17 @@
 import { useCallback, useState } from 'react';
 import { StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import type { ActivitiesScreenProps } from '~/app/navigation/types';
+import dayjs from 'dayjs';
+import type { NavTypes } from '~/app/navigation';
 import { card, screenPaddings } from '~/app/styles';
 import { vehicleModel } from '~/entities/vehicle';
 import { categoryLib } from '~/entities/category';
 import { Txt } from '~/shared/components';
 import type { Activity } from 'db';
 
-export default function Bookmarks(props: ActivitiesScreenProps<'Bookmarks'>) {
+export default function Bookmarks(
+  props: NavTypes.ActivitiesScreenProps<'Bookmarks'>,
+) {
   const { navigation } = props;
   const [vehicle] = vehicleModel.useCurrentVehicle();
   const [bookmarks, setBookmarks] = useState<Activity[]>([]);
@@ -61,7 +64,7 @@ export default function Bookmarks(props: ActivitiesScreenProps<'Bookmarks'>) {
                 )}
               </View>
               <Txt style={styles.dateTxt}>
-                {new Date(bookmark.date).toLocaleDateString()}
+                {dayjs(bookmark.date).format('DD MMM YYYY')}
               </Txt>
             </View>
           </TouchableWithoutFeedback>

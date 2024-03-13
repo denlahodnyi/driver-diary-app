@@ -8,7 +8,8 @@ import {
 import DatePicker from 'react-native-date-picker';
 import PickerSelect from 'react-native-picker-select';
 import { KeyboardAwareScrollView } from '@pietile-native-kit/keyboard-aware-scrollview';
-import type { RootStackScreenProps } from '~/app/navigation/types';
+import dayjs from 'dayjs';
+import type { NavTypes } from '~/app/navigation';
 import { buttonBase, buttonBaseText, screenPaddings } from '~/app/styles';
 import {
   APP_MIN_DATE_STR,
@@ -26,11 +27,12 @@ import {
   maskCurrency,
 } from '~/shared/components';
 import { ActivityDeleteDecorator } from '~/features/activities/delete';
-import { activityLib, activityModel } from '~/entities/activity';
+import { activityModel } from '~/entities/activity';
 import { categoryLib } from '~/entities/category';
 import type { Activity as ActivityModel } from 'db';
 
 const MIN_DATE = new Date(APP_MIN_DATE_STR);
+const DATE_FORMAT = 'DD MMM YYYY';
 
 type Form = {
   comment: string;
@@ -42,7 +44,9 @@ type Form = {
   subcategoryName: string;
 };
 
-export default function Activity(props: RootStackScreenProps<'Activity'>) {
+export default function Activity(
+  props: NavTypes.RootStackScreenProps<'Activity'>,
+) {
   const { navigation, route } = props;
   const mode = route.params.mode;
   const activityId = mode !== 'create' ? route.params.activityId : null;
@@ -57,7 +61,7 @@ export default function Activity(props: RootStackScreenProps<'Activity'>) {
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const [form, setForm] = useState<Form>({
     comment: '',
-    cost: '0',
+    cost: '0', // must be number of minor units
     currencyCode: userCurrencyCode || CURRENCY_CODE,
     date: new Date(),
     location: '',
@@ -86,9 +90,7 @@ export default function Activity(props: RootStackScreenProps<'Activity'>) {
     (record: ActivityModel) => {
       return {
         comment: record.comment || '',
-        cost: record.cost
-          ? activityLib.convertCostFromMinorUnits(record.cost).toString()
-          : '0',
+        cost: record.cost ? record.cost.toString() : '0',
         currencyCode: record.currencyCode || userCurrencyCode || CURRENCY_CODE,
         date: new Date(record.date),
         location: record.location || '',
@@ -104,11 +106,14 @@ export default function Activity(props: RootStackScreenProps<'Activity'>) {
     [selectedCategory, userCurrencyCode],
   );
 
-  const adaptFormDataToRecord = (formData: Form) => ({
-    ...formData,
-    cost: activityLib.convertCostToMinorUnits(Number(formData.cost)),
-    date: formData.date.valueOf(),
-  });
+  const adaptFormDataToRecord = useCallback(
+    (formData: Form) => ({
+      ...formData,
+      cost: Number(formData.cost),
+      date: formData.date.valueOf(),
+    }),
+    [],
+  );
 
   useEffect(
     function syncFormStateWithSavedData() {
@@ -116,7 +121,7 @@ export default function Activity(props: RootStackScreenProps<'Activity'>) {
         setForm(adaptRecordDataToForm(activityData));
       }
     },
-    [activityData],
+    [activityData, adaptRecordDataToForm],
   );
 
   const handleSave = async () => {
@@ -203,7 +208,7 @@ export default function Activity(props: RootStackScreenProps<'Activity'>) {
             onPress={() => setIsDatePickerOpen(true)}
           >
             <Txt style={[styles.text, styles.editableText]}>
-              {form.date.toLocaleDateString()}
+              {dayjs(form.date).format(DATE_FORMAT)}
             </Txt>
           </TouchableWithoutFeedback>
           <DatePicker
@@ -314,13 +319,15 @@ export default function Activity(props: RootStackScreenProps<'Activity'>) {
         </TouchableOpacity>
       </View>
       <View style={styles.section}>
-        <Txt style={styles.text}>{form.date.toLocaleDateString()}</Txt>
+        <Txt style={styles.text}>{dayjs(form.date).format(DATE_FORMAT)}</Txt>
       </View>
       {Number(form.cost) > 0 && (
         <View style={styles.section}>
           <Txt style={[styles.text, styles.sectionLabel]}>Cost</Txt>
           <Txt style={styles.text}>
-            {maskCurrency(form.cost, { currencyCode: form.currencyCode })}
+            {maskCurrency(form.cost, {
+              currencyCode: form.currencyCode,
+            })}
           </Txt>
         </View>
       )}

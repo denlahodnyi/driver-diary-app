@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import DatePicker from 'react-native-date-picker';
-import { APP_MIN_DATE_STR } from '~/app/constants';
 import { buttonBase, buttonBaseText } from '~/app/styles';
-import { Icon, Modalka, Txt } from '~/shared/components';
+import {
+  Modalka,
+  RangeDatePicker,
+  type RangeDatePickerProps,
+  Txt,
+} from '~/shared/components';
 import { categoriesWithIds } from 'db/data';
-
-const MIN_DATE = new Date(APP_MIN_DATE_STR);
 
 export type ActivitiesFiltersModalProps = {
   onApplyFilters?: (o: FiltersState) => void;
@@ -15,17 +16,13 @@ export type ActivitiesFiltersModalProps = {
   visible: boolean;
 };
 export type DatesState = {
-  end: Date;
-  endModified: boolean;
-  start: Date;
-  startModified: boolean;
+  end: Date | null;
+  start: Date | null;
 };
 export type FiltersState = {
   categoryIds: string[];
   dates: DatesState;
 };
-
-type DatePickerType = 'start' | 'end';
 
 export default function ActivitiesFiltersModal(
   props: ActivitiesFiltersModalProps,
@@ -33,14 +30,9 @@ export default function ActivitiesFiltersModal(
   // eslint-disable-next-line @typescript-eslint/naming-convention
   const { onApplyFilters, onClose, selectedFilters, visible } = props;
 
-  const [openedDatePicker, setOpenedDatePicker] = useState<
-    false | DatePickerType
-  >(false);
   const [dates, setDates] = useState<DatesState>({
-    end: new Date(),
-    endModified: false,
-    start: new Date(),
-    startModified: false,
+    end: null,
+    start: null,
   });
   const [categoryIds, setCategoryIds] = useState<string[]>([]);
 
@@ -58,76 +50,11 @@ export default function ActivitiesFiltersModal(
     if (onApplyFilters) onApplyFilters({ categoryIds, dates });
   };
 
-  const resetDate = (pickerType: DatePickerType) => {
-    setDates((prev) => ({
-      ...prev,
-      [pickerType]: new Date(),
-      [`${pickerType}Modified`]: false,
-    }));
+  const onDateConfirm = (
+    confirmedDates: Parameters<RangeDatePickerProps['onConfirm']>[0],
+  ) => {
+    setDates(confirmedDates);
   };
-
-  const confirmDate = (date: Date, pickerType: DatePickerType) => {
-    const selectedDate = date;
-
-    selectedDate.setHours(0);
-    selectedDate.setMinutes(0);
-    selectedDate.setSeconds(0);
-    selectedDate.setMilliseconds(0);
-
-    setDates((prev) => ({
-      ...prev,
-      [pickerType]: date,
-      [`${pickerType}Modified`]: true,
-    }));
-  };
-
-  const openDatePicker = (pickerType: DatePickerType) => {
-    setOpenedDatePicker(pickerType);
-  };
-
-  const getMinMaxDateProps = (pickerType: DatePickerType) => {
-    const datePickerProps = {
-      maximumDate: new Date(),
-      minimumDate: MIN_DATE,
-    };
-
-    if (pickerType === 'start') {
-      if (dates.endModified) {
-        datePickerProps.maximumDate = dates.end;
-      }
-    } else {
-      if (dates.startModified) {
-        datePickerProps.minimumDate = dates.start;
-      }
-    }
-
-    return datePickerProps;
-  };
-
-  const renderDatePickerResetButton = (pickerType: DatePickerType) => {
-    return (
-      <TouchableOpacity
-        accessibilityLabel={`Reset ${pickerType} date`}
-        style={styles.pickerResetButton}
-        onPress={() => resetDate(pickerType)}
-      >
-        <Icon name="close-circle-outline" size={24} />
-      </TouchableOpacity>
-    );
-  };
-
-  const renderDatePickerButton = (pickerType: DatePickerType) => (
-    <TouchableOpacity
-      accessibilityHint={`Pick ${pickerType} date`}
-      onPress={() => openDatePicker(pickerType)}
-    >
-      <Txt style={styles.pickerText}>
-        {dates[`${pickerType}Modified`]
-          ? dates[pickerType].toLocaleDateString()
-          : `${pickerType} date`}
-      </Txt>
-    </TouchableOpacity>
-  );
 
   return (
     <Modalka
@@ -138,33 +65,7 @@ export default function ActivitiesFiltersModal(
       <Txt style={styles.title}>Filters</Txt>
       <View style={[styles.section]}>
         <Txt style={styles.subTitle}>By date</Txt>
-        <View style={styles.pickersContainer}>
-          <View style={styles.pickerContainer}>
-            {renderDatePickerButton('start')}
-            {dates.startModified && renderDatePickerResetButton('start')}
-          </View>
-          <View>
-            <Txt accessible={false}>–</Txt>
-          </View>
-          <View style={styles.pickerContainer}>
-            {renderDatePickerButton('end')}
-            {dates.endModified && renderDatePickerResetButton('end')}
-          </View>
-        </View>
-        <DatePicker
-          modal
-          date={openedDatePicker === 'start' ? dates.start : dates.end}
-          {...(openedDatePicker ? getMinMaxDateProps(openedDatePicker) : {})}
-          mode="date"
-          open={!!openedDatePicker}
-          onCancel={() => setOpenedDatePicker(false)}
-          onConfirm={(date) => {
-            if (openedDatePicker) {
-              setOpenedDatePicker(false);
-              confirmDate(date, openedDatePicker);
-            }
-          }}
-        />
+        <RangeDatePicker dates={dates} onConfirm={onDateConfirm} />
       </View>
       <View style={styles.section}>
         <Txt style={styles.subTitle}>By categories</Txt>
@@ -229,21 +130,6 @@ const styles = StyleSheet.create({
   },
   modalView: {
     width: '80%',
-  },
-  pickerContainer: {
-    flexDirection: 'row',
-  },
-  pickerResetButton: {
-    marginLeft: 10,
-  },
-  pickerText: {
-    fontSize: 20,
-    textDecorationLine: 'underline',
-  },
-  pickersContainer: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    gap: 14,
   },
   section: {
     marginBottom: 20,

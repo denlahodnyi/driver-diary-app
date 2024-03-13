@@ -3,9 +3,11 @@ import { View } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {
+  ActivitiesStats,
   Activity,
   Bookmarks,
   Categories,
+  ExpenditureStats,
   Feed,
   Settings,
   Stats,
@@ -123,6 +125,16 @@ export default function RootNavigator() {
             headerRight: () =>
               route.params.mode === 'view' ? <HeaderActivityEditBtn /> : null,
           })}
+        />
+        <Screen
+          component={ExpenditureStats}
+          name="ExpenditureStats"
+          options={{ headerBackTitleVisible: false, headerTitle: '' }}
+        />
+        <Screen
+          component={ActivitiesStats}
+          name="ActivitiesStats"
+          options={{ headerBackTitleVisible: false, headerTitle: '' }}
         />
       </>
     </Navigator>
