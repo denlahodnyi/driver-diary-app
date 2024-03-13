@@ -1,48 +1,23 @@
-import PickerSelect, {
-  type PickerSelectProps,
-} from 'react-native-picker-select';
-import { toArray } from '~/shared/utils';
+import Dropdown, { type DropdownSelect } from 'react-native-input-select';
 import {
   inputBaseContainer,
   inputBaseError,
   inputBaseInput,
-  inputBaseInputWrapper,
   inputBaseLabel,
 } from '~/app/styles';
-import HeadlessInput, { type HeadlessInputProps } from './HeadlessInput';
 
-export type SelectInputProps = HeadlessInputProps<PickerSelectProps>;
+export type SelectInputProps = Parameters<typeof DropdownSelect>[0];
 
 export default function SelectInput(props: SelectInputProps) {
   return (
-    <HeadlessInput<PickerSelectProps>
+    <Dropdown
+      dropdownErrorTextStyle={inputBaseError}
+      labelStyle={inputBaseLabel}
+      searchControls={{
+        textInputContainerStyle: inputBaseContainer,
+        textInputStyle: inputBaseInput,
+      }}
       {...props}
-      InputComponent={PickerSelect}
-      containerProps={{
-        style: [inputBaseContainer, ...toArray(props.containerProps?.style)],
-      }}
-      errorProps={{
-        style: [inputBaseError, ...toArray(props.errorProps?.style)],
-      }}
-      inputWrapperProps={{
-        style: [
-          inputBaseInputWrapper,
-          ...toArray(props.inputWrapperProps?.style),
-        ],
-      }}
-      labelProps={{
-        style: [inputBaseLabel, ...toArray(props.labelProps?.style)],
-      }}
-      style={{
-        inputAndroid: {
-          ...inputBaseInput,
-          ...props.style,
-        },
-        inputIOS: {
-          ...inputBaseInput,
-          ...props.style,
-        },
-      }}
     />
   );
 }

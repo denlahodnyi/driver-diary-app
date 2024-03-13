@@ -6,3 +6,5 @@ export { default as Bookmarks } from './Bookmarks';
 export { default as Stats } from './Stats';
 export { default as Categories } from './Categories';
 export { default as Activity } from './Activity';
+export { default as ActivitiesStats } from './ActivitiesStats';
+export { default as ExpenditureStats } from './ExpenditureStats';

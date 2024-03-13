@@ -42,10 +42,8 @@ function Toolbar(props: ToolbarProps) {
     return {
       categoryIds,
       dates: {
-        end: endDate || new Date(),
-        endModified: !!endDate,
-        start: startDate || new Date(),
-        startModified: !!startDate,
+        end: endDate,
+        start: startDate,
       },
     };
   }, [selectedFilters]);
@@ -55,16 +53,14 @@ function Toolbar(props: ToolbarProps) {
   };
 
   const handleApplyFilters = (filters: ModalFiltersState) => {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    const { end, endModified, start, startModified } = filters.dates;
-    const { categoryIds } = filters;
+    const { categoryIds, dates } = filters;
 
     setIsFilterModalOpen(false);
     if (onFiltersApply) {
       onFiltersApply({
         categoryIds,
-        endDate: endModified ? end : null,
-        startDate: startModified ? start : null,
+        endDate: dates.end,
+        startDate: dates.start,
       });
     }
   };

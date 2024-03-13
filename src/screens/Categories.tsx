@@ -1,12 +1,12 @@
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { screenPaddings } from '~/app/styles';
 import { Txt } from '~/shared/components';
-import type { RootStackScreenProps } from '~/app/navigation/types';
+import type { NavTypes } from '~/app/navigation';
 import { categoriesWithIds } from 'db/data';
 
 const sorted = categoriesWithIds.sort((a, b) => (a.name > b.name ? 1 : -1));
 
-function Categories(props: RootStackScreenProps<'Categories'>) {
+function Categories(props: NavTypes.RootStackScreenProps<'Categories'>) {
   const { navigation, route } = props;
   const mode = route.params.mode;
 
