@@ -94,19 +94,21 @@ export default function ExpenditureStats() {
           if (result) {
             let maxValue = 0;
             const nextChartData: ChartDataState = {
-              dataSets: result.currencyCodes.map((code, i) => {
-                const { data, maxValue: max } = prepareChartData(
-                  result.byCurrencyCode[code],
-                );
+              dataSets: result.currencyCodes.length
+                ? result.currencyCodes.map((code, i) => {
+                    const { data, maxValue: max } = prepareChartData(
+                      result.byCurrencyCode[code],
+                    );
 
-                maxValue = Math.max(maxValue, max);
+                    maxValue = Math.max(maxValue, max);
 
-                return {
-                  color: randomRgb(i),
-                  data,
-                  dataPointsColor: randomRgb(i),
-                };
-              }),
+                    return {
+                      color: randomRgb(i),
+                      data,
+                      dataPointsColor: randomRgb(i),
+                    };
+                  })
+                : [{ data: [] }],
               maxValue,
             };
 

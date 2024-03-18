@@ -20,15 +20,31 @@ type FiltersState = {
   startDate: null | Date;
 };
 
+export type ToolbarViewType = 'timeline' | 'calendar';
+
 type ToolbarProps = {
   canSort?: boolean;
   containerStyle?: StyleProp<ViewStyle>;
   onFiltersApply?: (filters: FiltersState) => void;
+  onViewSwitch?: (type: ToolbarViewType) => void;
   selectedFilters?: FiltersState;
+  viewSwitcherType?: ToolbarViewType;
+};
+
+type Toolbar = {
+  ToolbarProps: ToolbarProps;
+  ToolbarViewType: ToolbarViewType;
 };
 
 function Toolbar(props: ToolbarProps) {
-  const { canSort, containerStyle, onFiltersApply, selectedFilters } = props;
+  const {
+    canSort,
+    containerStyle,
+    onFiltersApply,
+    onViewSwitch,
+    selectedFilters,
+    viewSwitcherType,
+  } = props;
   const navigation = useNavigation();
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
 
@@ -68,6 +84,12 @@ function Toolbar(props: ToolbarProps) {
   const handleToggleSortSettings = () =>
     setIsFilterModalOpen(!isFilterModalOpen);
 
+  const handleViewToggle = () => {
+    if (onViewSwitch) {
+      onViewSwitch(viewSwitcherType === 'calendar' ? 'timeline' : 'calendar');
+    }
+  };
+
   return (
     <View style={[styles.container, ...toArray(containerStyle)]}>
       <TouchableOpacity
@@ -76,6 +98,22 @@ function Toolbar(props: ToolbarProps) {
       >
         <Icon name="add" size={25} />
       </TouchableOpacity>
+      <>
+        <View style={styles.divider} />
+        <TouchableOpacity
+          accessibilityLabel="Toggle view"
+          onPress={handleViewToggle}
+        >
+          <Icon
+            name={
+              viewSwitcherType === 'calendar'
+                ? 'list-outline'
+                : 'calendar-outline'
+            }
+            size={25}
+          />
+        </TouchableOpacity>
+      </>
       {canSort && (
         <>
           <View style={styles.divider} />
@@ -112,6 +150,6 @@ const styles = StyleSheet.create({
     borderColor: '#CECECE',
     borderLeftWidth: 1,
     height: '100%',
-    marginHorizontal: 6,
+    marginHorizontal: 8,
   },
 });

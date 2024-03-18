@@ -1,10 +1,17 @@
+import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { screenPaddings } from '~/app/styles';
-import { ActivitiesToolbar, Timeline } from '~/widgets/activities/feed';
+import {
+  ActivitiesToolbar,
+  CalendarView,
+  Timeline,
+} from '~/widgets/activities/feed';
 import { activityModel } from '~/entities/activity';
 import { Txt } from '~/shared/components';
 
 export default function Feed() {
+  const [view, setView] =
+    useState<ActivitiesToolbar['ToolbarViewType']>('timeline');
   const [activities, { options, setOptions }] = activityModel.useActivities();
   const isFilterActive: boolean =
     options.categoryIds.length > 0 || !!options.startDate || !!options.endDate;
@@ -21,16 +28,22 @@ export default function Feed() {
   }
 
   return (
-    <View style={screenPaddings}>
+    <View style={styles.screen}>
       <View style={styles.floatingToolbarContainer}>
         <ActivitiesToolbar
           canSort={isFilterActive || activities.length > 1}
           containerStyle={styles.floatingToolbar}
           selectedFilters={options}
+          viewSwitcherType={view}
           onFiltersApply={setOptions}
+          onViewSwitch={setView}
         />
       </View>
-      <Timeline activities={activities} />
+      {view === 'timeline' ? (
+        <Timeline activities={activities} />
+      ) : (
+        <CalendarView activities={activities} />
+      )}
     </View>
   );
 }
@@ -54,6 +67,11 @@ const styles = StyleSheet.create({
     right: 0,
     top: 4,
     zIndex: 10,
+  },
+  screen: {
+    ...screenPaddings,
+    flex: 1,
+    paddingBottom: 0,
   },
   screenCentered: {
     alignItems: 'center',

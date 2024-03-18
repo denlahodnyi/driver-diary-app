@@ -9,6 +9,7 @@ import { categoryLib } from '~/entities/category';
 import { Txt } from '~/shared/components';
 import type { Activity } from 'db';
 
+// TODO: add empty message
 export default function Bookmarks(
   props: NavTypes.ActivitiesScreenProps<'Bookmarks'>,
 ) {
