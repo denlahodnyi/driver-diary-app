@@ -141,6 +141,21 @@ module.exports = {
         prev: ['interface', 'type'],
         next: ['interface', 'type'],
       },
+      {
+        blankLine: 'always',
+        prev: '*',
+        next: 'export',
+      },
+      {
+        blankLine: 'any',
+        prev: 'export',
+        next: 'export',
+      },
+      {
+        blankLine: 'always',
+        prev: 'block',
+        next: '*',
+      },
     ],
     '@typescript-eslint/consistent-type-definitions': [2, 'type'],
     '@typescript-eslint/consistent-type-imports': [

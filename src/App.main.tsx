@@ -1,4 +1,4 @@
-// import { Platform, SafeAreaView } from 'react-native';
+import { SafeAreaView, StyleSheet } from 'react-native';
 import {
   NavigationContainer,
   useNavigationContainerRef,
@@ -27,12 +27,18 @@ function App(): React.JSX.Element {
   // };
 
   return (
-    <DatabaseProvider database={database}>
-      <NavigationContainer ref={navigationRef}>
-        <RootNavigator />
-      </NavigationContainer>
-    </DatabaseProvider>
+    <SafeAreaView style={styles.container}>
+      <DatabaseProvider database={database}>
+        <NavigationContainer ref={navigationRef}>
+          <RootNavigator />
+        </NavigationContainer>
+      </DatabaseProvider>
+    </SafeAreaView>
   );
 }
 
 export default App;
+
+const styles = StyleSheet.create({
+  container: { flex: 1 },
+});

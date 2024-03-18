@@ -236,9 +236,10 @@ async function getCategoriesAnalysis(options?: {
       Q.unsafeSqlQuery(
         `SELECT category_id AS categoryId, COUNT(category_id) AS total
           FROM activities
+          WHERE vehicle_id = ?
           ${
             datesFilterCondition || categoryFilterCondition
-              ? `WHERE ${datesFilterCondition} ${
+              ? `AND ${datesFilterCondition} ${
                   categoryFilterCondition && datesFilterCondition
                     ? `AND ${categoryFilterCondition}`
                     : categoryFilterCondition
@@ -247,6 +248,7 @@ async function getCategoriesAnalysis(options?: {
           }
           GROUP BY categoryId
           ORDER BY total DESC`,
+        [vehicleId],
       ),
     );
 

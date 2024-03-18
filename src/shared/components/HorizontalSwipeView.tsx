@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import { Animated, Easing, PanResponder, type ViewProps } from 'react-native';
 import { toArray } from '../utils';
 
+// FIX: full swipe when it should be disabled
 type renderElementParam = {
   animatedValue: Animated.Value;
   resetSwipedState: () => void;
