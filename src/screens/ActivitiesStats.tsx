@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useTheme } from '@react-navigation/native';
 import { PieChart, type pieDataItem } from 'react-native-gifted-charts';
 import { activityModel } from '~/entities/activity';
 import { screenPaddings } from '~/app/styles';
@@ -15,6 +15,7 @@ type ChartDataItem = pieDataItem & { label: string };
 type ChartDataState = (pieDataItem & { label: string })[];
 
 export default function ActivitiesStats() {
+  const navigatorTheme = useTheme();
   const [dates, setDates] = useState<DatesState>({ end: null, start: null });
   const [categoryIds, setCategoryIds] = useState<string[]>([]);
   const [chartData, setChartData] = useState<ChartDataState>([]);
@@ -77,6 +78,7 @@ export default function ActivitiesStats() {
           sectionAutoFocus
           centerLabelComponent={renderCentralLabel}
           data={chartData.map((o, i) => ({ ...o, focused: i === focusedIdx }))}
+          innerCircleColor={navigatorTheme.colors.background}
           innerRadius={100}
           radius={160}
           toggleFocusOnPress={false}

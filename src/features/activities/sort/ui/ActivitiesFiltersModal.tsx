@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import { buttonBase, buttonBaseText } from '~/app/styles';
+import { View } from 'react-native';
+import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import {
+  Button,
   Modalka,
   RangeDatePicker,
   type RangeDatePickerProps,
@@ -29,6 +30,7 @@ export default function ActivitiesFiltersModal(
 ) {
   // eslint-disable-next-line @typescript-eslint/naming-convention
   const { onApplyFilters, onClose, selectedFilters, visible } = props;
+  const { styles } = useStyles(stylesheet);
 
   const [dates, setDates] = useState<DatesState>({
     end: null,
@@ -62,7 +64,9 @@ export default function ActivitiesFiltersModal(
       visible={visible}
       onClose={onClose}
     >
-      <Txt style={styles.title}>Filters</Txt>
+      <Txt fontWeight="medium" style={styles.title}>
+        Filters
+      </Txt>
       <View style={[styles.section]}>
         <Txt style={styles.subTitle}>By date</Txt>
         <RangeDatePicker dates={dates} onConfirm={onDateConfirm} />
@@ -74,10 +78,11 @@ export default function ActivitiesFiltersModal(
             const isSelected = categoryIds.includes(category.id);
 
             return (
-              <TouchableOpacity
+              <Button
                 key={category.id}
+                isSecondary
                 aria-checked={isSelected}
-                style={[styles.chip, isSelected && styles.chipSelected]}
+                variant={isSelected ? 'filled' : 'outlined'}
                 onPress={() =>
                   setCategoryIds((prev) =>
                     isSelected
@@ -86,42 +91,29 @@ export default function ActivitiesFiltersModal(
                   )
                 }
               >
-                <Txt style={styles.chipSelected}>{category.name}</Txt>
-              </TouchableOpacity>
+                {category.name}
+              </Button>
             );
           })}
         </View>
       </View>
       <View style={styles.actionsContainer}>
-        <TouchableOpacity style={buttonBase} onPress={onClose}>
-          <Txt style={buttonBaseText}>Close</Txt>
-        </TouchableOpacity>
-        <TouchableOpacity style={buttonBase} onPress={handleApply}>
-          <Txt style={buttonBaseText}>Apply</Txt>
-        </TouchableOpacity>
+        <Button isPrimary onPress={handleApply}>
+          Apply
+        </Button>
+        <Button isSecondary variant="text" onPress={onClose}>
+          Close
+        </Button>
       </View>
     </Modalka>
   );
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
   actionsContainer: {
     flexDirection: 'row',
     gap: 20,
     justifyContent: 'center',
-  },
-  chip: {
-    borderColor: '#CECECE',
-    borderRadius: 6,
-    borderWidth: 1,
-    paddingHorizontal: 6,
-    paddingVertical: 4,
-  },
-  chipSelected: {
-    borderColor: '#000',
-  },
-  chipText: {
-    fontSize: 18,
   },
   chipsContainer: {
     flexDirection: 'row',
@@ -129,12 +121,13 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   modalView: {
-    width: '80%',
+    width: '90%',
   },
   section: {
     marginBottom: 20,
   },
   subTitle: {
+    color: theme.colors.text.secondary,
     fontSize: 22,
     marginBottom: 16,
   },
@@ -143,4 +136,4 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: 'center',
   },
-});
+}));

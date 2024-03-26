@@ -8,12 +8,18 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* DriverDiaryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* DriverDiaryTests.m */; };
+		13107763D7DC4A29A4B55E1E /* Poppins-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FF0D665ACA0A42C68986EEA8 /* Poppins-ExtraBold.ttf */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		21B99915F3994C5F95A556C1 /* Poppins-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 269900A64D7B4B8EB0F8A6E5 /* Poppins-Black.ttf */; };
+		30E1961CAC6B485C9ED2C75D /* Poppins-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 088638A1E8574E9DA2F7A262 /* Poppins-Regular.ttf */; };
+		4EA5CC0CB29E46FBBCE0528E /* Poppins-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EFC802DA3D7E4C45AB14EF56 /* Poppins-Bold.ttf */; };
+		646667C2A986485D9D8FBFF5 /* Poppins-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BE20F9291B1D4C85B55508D9 /* Poppins-Medium.ttf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		841554E1B388A73C5E318453 /* libPods-DriverDiary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 069E8A27F87AB534358AE5F8 /* libPods-DriverDiary.a */; };
-		FF2F16D75F648E737AFDE786 /* libPods-DriverDiary-DriverDiaryTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 12C9485B7AD9AA678B69DD86 /* libPods-DriverDiary-DriverDiaryTests.a */; };
+		B57BF361BBAF44699359A95C /* Poppins-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FD54CB7057AA450C806E833E /* Poppins-Light.ttf */; };
+		CFBBD06F63D4A0A4CE87E91C /* libPods-DriverDiary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 60D8263D7F83F3DCA2AC2DE9 /* libPods-DriverDiary.a */; };
+		EF62453ECCD213CF81663B9A /* libPods-DriverDiary-DriverDiaryTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 30576E566E2379A1F37C7702 /* libPods-DriverDiary-DriverDiaryTests.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -30,18 +36,20 @@
 		00E356EE1AD99517003FC87E /* DriverDiaryTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DriverDiaryTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* DriverDiaryTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DriverDiaryTests.m; sourceTree = "<group>"; };
-		069E8A27F87AB534358AE5F8 /* libPods-DriverDiary.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-DriverDiary.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		12C9485B7AD9AA678B69DD86 /* libPods-DriverDiary-DriverDiaryTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-DriverDiary-DriverDiaryTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		088638A1E8574E9DA2F7A262 /* Poppins-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Regular.ttf"; path = "../assets/fonts/Poppins-Regular.ttf"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* DriverDiary.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DriverDiary.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = DriverDiary/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = DriverDiary/AppDelegate.mm; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = DriverDiary/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = DriverDiary/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = DriverDiary/main.m; sourceTree = "<group>"; };
-		2E7F5CA87305816AE344F78B /* Pods-DriverDiary.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DriverDiary.release.xcconfig"; path = "Target Support Files/Pods-DriverDiary/Pods-DriverDiary.release.xcconfig"; sourceTree = "<group>"; };
-		57817E9DE55D8B92DC3619A4 /* Pods-DriverDiary.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DriverDiary.debug.xcconfig"; path = "Target Support Files/Pods-DriverDiary/Pods-DriverDiary.debug.xcconfig"; sourceTree = "<group>"; };
-		79D20A21B22A887611814822 /* Pods-DriverDiary-DriverDiaryTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DriverDiary-DriverDiaryTests.release.xcconfig"; path = "Target Support Files/Pods-DriverDiary-DriverDiaryTests/Pods-DriverDiary-DriverDiaryTests.release.xcconfig"; sourceTree = "<group>"; };
+		269900A64D7B4B8EB0F8A6E5 /* Poppins-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Black.ttf"; path = "../assets/fonts/Poppins-Black.ttf"; sourceTree = "<group>"; };
+		30576E566E2379A1F37C7702 /* libPods-DriverDiary-DriverDiaryTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-DriverDiary-DriverDiaryTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		55B4B04ECB214D445F6AB411 /* Pods-DriverDiary-DriverDiaryTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DriverDiary-DriverDiaryTests.debug.xcconfig"; path = "Target Support Files/Pods-DriverDiary-DriverDiaryTests/Pods-DriverDiary-DriverDiaryTests.debug.xcconfig"; sourceTree = "<group>"; };
+		60D8263D7F83F3DCA2AC2DE9 /* libPods-DriverDiary.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-DriverDiary.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = DriverDiary/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		85EC9E5150896A7F1F1214E4 /* Pods-DriverDiary.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DriverDiary.debug.xcconfig"; path = "Target Support Files/Pods-DriverDiary/Pods-DriverDiary.debug.xcconfig"; sourceTree = "<group>"; };
+		91FA8045EC9E82C56C9E956B /* Pods-DriverDiary.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DriverDiary.release.xcconfig"; path = "Target Support Files/Pods-DriverDiary/Pods-DriverDiary.release.xcconfig"; sourceTree = "<group>"; };
 		B7CF419F2B616A960019A1C1 /* Fontisto.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Fontisto.ttf; sourceTree = "<group>"; };
 		B7CF41A02B616A960019A1C1 /* Octicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Octicons.ttf; sourceTree = "<group>"; };
 		B7CF41A12B616A960019A1C1 /* Feather.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Feather.ttf; sourceTree = "<group>"; };
@@ -61,8 +69,12 @@
 		B7CF41AF2B616A960019A1C1 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = SimpleLineIcons.ttf; sourceTree = "<group>"; };
 		B7CF41B02B616A960019A1C1 /* FontAwesome6_Brands.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome6_Brands.ttf; sourceTree = "<group>"; };
 		B7CF41B12B616A960019A1C1 /* MaterialIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MaterialIcons.ttf; sourceTree = "<group>"; };
-		C6EC54409B8F56D967376107 /* Pods-DriverDiary-DriverDiaryTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DriverDiary-DriverDiaryTests.debug.xcconfig"; path = "Target Support Files/Pods-DriverDiary-DriverDiaryTests/Pods-DriverDiary-DriverDiaryTests.debug.xcconfig"; sourceTree = "<group>"; };
+		BE20F9291B1D4C85B55508D9 /* Poppins-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Medium.ttf"; path = "../assets/fonts/Poppins-Medium.ttf"; sourceTree = "<group>"; };
+		DB7FE0E34310EA9F54D25697 /* Pods-DriverDiary-DriverDiaryTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DriverDiary-DriverDiaryTests.release.xcconfig"; path = "Target Support Files/Pods-DriverDiary-DriverDiaryTests/Pods-DriverDiary-DriverDiaryTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		EFC802DA3D7E4C45AB14EF56 /* Poppins-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Bold.ttf"; path = "../assets/fonts/Poppins-Bold.ttf"; sourceTree = "<group>"; };
+		FD54CB7057AA450C806E833E /* Poppins-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Light.ttf"; path = "../assets/fonts/Poppins-Light.ttf"; sourceTree = "<group>"; };
+		FF0D665ACA0A42C68986EEA8 /* Poppins-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-ExtraBold.ttf"; path = "../assets/fonts/Poppins-ExtraBold.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,7 +82,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FF2F16D75F648E737AFDE786 /* libPods-DriverDiary-DriverDiaryTests.a in Frameworks */,
+				EF62453ECCD213CF81663B9A /* libPods-DriverDiary-DriverDiaryTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,7 +90,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				841554E1B388A73C5E318453 /* libPods-DriverDiary.a in Frameworks */,
+				CFBBD06F63D4A0A4CE87E91C /* libPods-DriverDiary.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -120,8 +132,8 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				069E8A27F87AB534358AE5F8 /* libPods-DriverDiary.a */,
-				12C9485B7AD9AA678B69DD86 /* libPods-DriverDiary-DriverDiaryTests.a */,
+				60D8263D7F83F3DCA2AC2DE9 /* libPods-DriverDiary.a */,
+				30576E566E2379A1F37C7702 /* libPods-DriverDiary-DriverDiaryTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -142,6 +154,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
+				DE8D3FB30C614E268744AAFA /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -187,12 +200,26 @@
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				57817E9DE55D8B92DC3619A4 /* Pods-DriverDiary.debug.xcconfig */,
-				2E7F5CA87305816AE344F78B /* Pods-DriverDiary.release.xcconfig */,
-				C6EC54409B8F56D967376107 /* Pods-DriverDiary-DriverDiaryTests.debug.xcconfig */,
-				79D20A21B22A887611814822 /* Pods-DriverDiary-DriverDiaryTests.release.xcconfig */,
+				85EC9E5150896A7F1F1214E4 /* Pods-DriverDiary.debug.xcconfig */,
+				91FA8045EC9E82C56C9E956B /* Pods-DriverDiary.release.xcconfig */,
+				55B4B04ECB214D445F6AB411 /* Pods-DriverDiary-DriverDiaryTests.debug.xcconfig */,
+				DB7FE0E34310EA9F54D25697 /* Pods-DriverDiary-DriverDiaryTests.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		DE8D3FB30C614E268744AAFA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				269900A64D7B4B8EB0F8A6E5 /* Poppins-Black.ttf */,
+				EFC802DA3D7E4C45AB14EF56 /* Poppins-Bold.ttf */,
+				FF0D665ACA0A42C68986EEA8 /* Poppins-ExtraBold.ttf */,
+				FD54CB7057AA450C806E833E /* Poppins-Light.ttf */,
+				BE20F9291B1D4C85B55508D9 /* Poppins-Medium.ttf */,
+				088638A1E8574E9DA2F7A262 /* Poppins-Regular.ttf */,
+			);
+			name = Resources;
+			path = "";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -202,12 +229,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "DriverDiaryTests" */;
 			buildPhases = (
-				9CDD0EDDD69F85CB938F4AEF /* [CP] Check Pods Manifest.lock */,
+				A894983F3BADA6BACE997017 /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				D8E0A49DB37E665EA44CA63F /* [CP] Embed Pods Frameworks */,
-				9712079B91CAFC9F22561999 /* [CP] Copy Pods Resources */,
+				B23EB84726578B8F9FECD441 /* [CP] Embed Pods Frameworks */,
+				2F1159DC306AA0540D869C96 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -223,13 +250,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "DriverDiary" */;
 			buildPhases = (
-				07AB0551EF4DE401A39BD01E /* [CP] Check Pods Manifest.lock */,
+				522CC87319C7B1517E3705CC /* [CP] Check Pods Manifest.lock */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				730261013D7EDD69BA2DB4C9 /* [CP] Embed Pods Frameworks */,
-				653A4771B6B9EA4519C9A723 /* [CP] Copy Pods Resources */,
+				9A7981697D22906DEDDD8B84 /* [CP] Embed Pods Frameworks */,
+				788116D9701DEAEB190B3688 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -290,6 +317,12 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				21B99915F3994C5F95A556C1 /* Poppins-Black.ttf in Resources */,
+				4EA5CC0CB29E46FBBCE0528E /* Poppins-Bold.ttf in Resources */,
+				13107763D7DC4A29A4B55E1E /* Poppins-ExtraBold.ttf in Resources */,
+				B57BF361BBAF44699359A95C /* Poppins-Light.ttf in Resources */,
+				646667C2A986485D9D8FBFF5 /* Poppins-Medium.ttf in Resources */,
+				30E1961CAC6B485C9ED2C75D /* Poppins-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -312,7 +345,24 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
 		};
-		07AB0551EF4DE401A39BD01E /* [CP] Check Pods Manifest.lock */ = {
+		2F1159DC306AA0540D869C96 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-DriverDiary-DriverDiaryTests/Pods-DriverDiary-DriverDiaryTests-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-DriverDiary-DriverDiaryTests/Pods-DriverDiary-DriverDiaryTests-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-DriverDiary-DriverDiaryTests/Pods-DriverDiary-DriverDiaryTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		522CC87319C7B1517E3705CC /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -334,7 +384,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		653A4771B6B9EA4519C9A723 /* [CP] Copy Pods Resources */ = {
+		788116D9701DEAEB190B3688 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -351,7 +401,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-DriverDiary/Pods-DriverDiary-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		730261013D7EDD69BA2DB4C9 /* [CP] Embed Pods Frameworks */ = {
+		9A7981697D22906DEDDD8B84 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -368,24 +418,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-DriverDiary/Pods-DriverDiary-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		9712079B91CAFC9F22561999 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-DriverDiary-DriverDiaryTests/Pods-DriverDiary-DriverDiaryTests-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-DriverDiary-DriverDiaryTests/Pods-DriverDiary-DriverDiaryTests-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-DriverDiary-DriverDiaryTests/Pods-DriverDiary-DriverDiaryTests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		9CDD0EDDD69F85CB938F4AEF /* [CP] Check Pods Manifest.lock */ = {
+		A894983F3BADA6BACE997017 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -407,7 +440,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		D8E0A49DB37E665EA44CA63F /* [CP] Embed Pods Frameworks */ = {
+		B23EB84726578B8F9FECD441 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -457,7 +490,7 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C6EC54409B8F56D967376107 /* Pods-DriverDiary-DriverDiaryTests.debug.xcconfig */;
+			baseConfigurationReference = 55B4B04ECB214D445F6AB411 /* Pods-DriverDiary-DriverDiaryTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				DEVELOPMENT_TEAM = AAV4YJ3PTD;
@@ -485,7 +518,7 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 79D20A21B22A887611814822 /* Pods-DriverDiary-DriverDiaryTests.release.xcconfig */;
+			baseConfigurationReference = DB7FE0E34310EA9F54D25697 /* Pods-DriverDiary-DriverDiaryTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
@@ -510,7 +543,7 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 57817E9DE55D8B92DC3619A4 /* Pods-DriverDiary.debug.xcconfig */;
+			baseConfigurationReference = 85EC9E5150896A7F1F1214E4 /* Pods-DriverDiary.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -594,7 +627,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2E7F5CA87305816AE344F78B /* Pods-DriverDiary.release.xcconfig */;
+			baseConfigurationReference = 91FA8045EC9E82C56C9E956B /* Pods-DriverDiary.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;

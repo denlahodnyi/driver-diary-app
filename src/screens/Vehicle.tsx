@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import type { NavTypes } from '~/app/navigation';
 import { vehicleModel } from '~/entities/vehicle';
-import { VehicleForm } from '~/features/createNewVehicle';
+import { VehicleForm } from '~/features/vehicles/create';
 import type { TError } from '~/shared/types';
 
 type Form = {

@@ -1,6 +1,7 @@
 import PickerSelect, {
   type PickerSelectProps,
 } from 'react-native-picker-select';
+import { useStyles } from 'react-native-unistyles';
 import { toArray } from '~/shared/utils';
 import {
   inputBaseContainer,
@@ -14,6 +15,8 @@ import HeadlessInput, { type HeadlessInputProps } from './HeadlessInput';
 export type PickerInputProps = HeadlessInputProps<PickerSelectProps>;
 
 export default function PickerInput(props: PickerInputProps) {
+  const { theme } = useStyles();
+
   return (
     <HeadlessInput<PickerSelectProps>
       {...props}
@@ -22,24 +25,24 @@ export default function PickerInput(props: PickerInputProps) {
         style: [inputBaseContainer, ...toArray(props.containerProps?.style)],
       }}
       errorProps={{
-        style: [inputBaseError, ...toArray(props.errorProps?.style)],
+        style: [inputBaseError(theme), ...toArray(props.errorProps?.style)],
       }}
       inputWrapperProps={{
         style: [
-          inputBaseInputWrapper,
+          inputBaseInputWrapper(theme),
           ...toArray(props.inputWrapperProps?.style),
         ],
       }}
       labelProps={{
-        style: [inputBaseLabel, ...toArray(props.labelProps?.style)],
+        style: [inputBaseLabel(), ...toArray(props.labelProps?.style)],
       }}
       style={{
         inputAndroid: {
-          ...inputBaseInput,
+          ...inputBaseInput(theme),
           ...props.style,
         },
         inputIOS: {
-          ...inputBaseInput,
+          ...inputBaseInput(theme),
           ...props.style,
         },
       }}

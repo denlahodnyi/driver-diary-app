@@ -1,6 +1,5 @@
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import { Input, Txt } from '~/shared/components';
-import { buttonBase, buttonBaseText, card } from '~/app/styles';
+import { StyleSheet, View } from 'react-native';
+import { Button, Input } from '~/shared/components';
 
 type FormKeys = 'model' | 'title';
 
@@ -25,7 +24,7 @@ export default function VehicleForm(props: VehicleFormProps) {
         aria-labelledby="formLabel_title"
         enterKeyHint="next"
         error={error.title}
-        label="Title"
+        label="Title:"
         labelProps={{ nativeID: 'formLabel_title' }}
         value={data.title}
         onChangeText={(title) => onChange('title', title)}
@@ -40,12 +39,12 @@ export default function VehicleForm(props: VehicleFormProps) {
         onChangeText={(model) => onChange('model', model)}
       />
       <View style={styles.formButtons}>
-        <TouchableOpacity style={buttonBase} onPress={onSubmit}>
-          <Txt style={buttonBaseText}>Save</Txt>
-        </TouchableOpacity>
-        <TouchableOpacity style={buttonBase} onPress={onCancel}>
-          <Txt style={buttonBaseText}>Cancel</Txt>
-        </TouchableOpacity>
+        <Button isPrimary onPress={onSubmit}>
+          Save
+        </Button>
+        <Button isSecondary variant="text" onPress={onCancel}>
+          Cancel
+        </Button>
       </View>
     </View>
   );
@@ -53,23 +52,13 @@ export default function VehicleForm(props: VehicleFormProps) {
 
 const styles = StyleSheet.create({
   form: {
-    ...card,
     paddingHorizontal: 8,
     paddingVertical: 14,
     width: '100%',
   },
   formButtons: {
     flexDirection: 'row',
-    gap: 12,
+    gap: 8,
     justifyContent: 'center',
-  },
-  toggleButton: {
-    ...card,
-    paddingVertical: 50,
-    width: '100%',
-  },
-  toggleButton__text: {
-    fontSize: 24,
-    textAlign: 'center',
   },
 });

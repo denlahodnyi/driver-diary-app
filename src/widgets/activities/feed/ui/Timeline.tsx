@@ -1,8 +1,13 @@
 import { useMemo } from 'react';
-import { SectionList, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { SectionList, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { card } from '~/app/styles';
-import { HorizontalSwipeView, Icon, Txt } from '~/shared/components';
+import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import dayjs from 'dayjs';
+import {
+  listItem as listItemStyle,
+  swipableListItemLastActionButton,
+} from '~/app/styles';
+import { HorizontalSwiper, Icon, Txt } from '~/shared/components';
 import { ActivityDeleteDecorator } from '~/features/activities/delete';
 import { activityLib } from '~/entities/activity';
 import { categoryLib } from '~/entities/category';
@@ -12,15 +17,10 @@ type TimelineProps = {
   activities: Activity[];
 };
 
-const dateTimeFormat = new Intl.DateTimeFormat('en-US', {
-  year: 'numeric',
-  month: 'long',
-  day: '2-digit',
-});
-
 export default function Timeline(props: TimelineProps) {
   const { activities } = props;
   const navigation = useNavigation();
+  const { styles, theme } = useStyles(stylesheet);
 
   const sectionListData = useMemo(() => {
     const data = activityLib.groupActivitiesByDate(activities);
@@ -40,193 +40,165 @@ export default function Timeline(props: TimelineProps) {
   };
 
   return (
-    <>
-      <SectionList
-        renderItem={(listItem) => {
-          const { item, section } = listItem;
-          const { byDate, dates } = item;
+    <ActivityDeleteDecorator>
+      {(handleDelete) => (
+        <SectionList
+          renderItem={(listItem) => {
+            const { item, section } = listItem;
+            const { byDate, dates } = item;
 
-          return (
-            <View key={section.year} style={styles.section}>
-              {dates.map((date) => {
-                const activitiesByDate = byDate[date];
-                const dateObj = new Date(date);
-                const formattedDate = dateTimeFormat
-                  .formatToParts(dateObj)
-                  .reduce<string>((prev, part) => {
-                    if (part.type === 'day') return `${part.value}${prev}`;
-                    else if (part.type === 'month')
-                      return `${prev} ${part.value}`;
-                    return prev;
-                  }, '');
+            return (
+              <View key={section.year} style={styles.section}>
+                {dates.map((date) => {
+                  const activitiesByDate = byDate[date];
+                  const formattedDate = dayjs(date).format('DD MMMM');
 
-                return (
-                  <View key={date} style={styles.group}>
-                    <View>
-                      <Txt style={styles.groupHeader}>{formattedDate}</Txt>
-                    </View>
-                    <View style={styles.activitiesGroup}>
-                      {activitiesByDate.map((activity) => {
-                        const category = categoryLib.findCategoryById(
-                          activity.categoryId,
-                        );
-                        const subcategoryName =
-                          activity.subcategoryId && category
-                            ? category.subcategories.find(
-                                (sc) => sc.id === activity.subcategoryId,
-                              )?.name
-                            : null;
+                  return (
+                    <View key={date} style={styles.group}>
+                      <View style={styles.groupHeader}>
+                        <Txt style={styles.groupHeaderTitle}>
+                          {formattedDate}
+                        </Txt>
+                      </View>
+                      <View style={styles.activitiesGroup}>
+                        {activitiesByDate.map((activity, index, array) => {
+                          const category = categoryLib.findCategoryById(
+                            activity.categoryId,
+                          );
+                          const subcategoryName =
+                            activity.subcategoryId && category
+                              ? category.subcategories.find(
+                                  (sc) => sc.id === activity.subcategoryId,
+                                )?.name
+                              : null;
 
-                        return (
-                          <View
-                            key={activity.id}
-                            style={styles.activityItemContainer}
-                          >
-                            <HorizontalSwipeView
-                              config={{ isRightSwipeDisabled: true }}
-                              renderRightElement={({ resetSwipedState }) => (
-                                <View
-                                  style={styles.activityItemActionsContainer}
-                                >
-                                  <TouchableOpacity
-                                    accessibilityLabel={
-                                      activity.isBookmark
-                                        ? 'Remove bookmark'
-                                        : 'Save as bookmark'
-                                    }
-                                    style={styles.activityItemActionButton}
-                                    onPress={() => {
-                                      resetSwipedState();
-                                      activity.toggleBookmark();
-                                    }}
-                                  >
-                                    <Icon name="bookmark" size={20} />
-                                  </TouchableOpacity>
-                                  <TouchableOpacity
-                                    accessibilityLabel="Edit item"
-                                    style={styles.activityItemActionButton}
-                                    onPress={() => {
-                                      resetSwipedState();
-                                      handleUpdateActivity(activity.id);
-                                    }}
-                                  >
-                                    <Icon name="pencil" size={20} />
-                                  </TouchableOpacity>
-                                  <ActivityDeleteDecorator>
-                                    {(handleDeleteActivity) => (
-                                      <TouchableOpacity
-                                        accessibilityLabel="Delete item"
-                                        style={styles.activityItemActionButton}
-                                        onPress={() => {
-                                          handleDeleteActivity(
-                                            activity.id,
-                                            () => {
-                                              resetSwipedState();
-                                            },
-                                          );
-                                        }}
-                                      >
-                                        <Icon name="trash" size={20} />
-                                      </TouchableOpacity>
-                                    )}
-                                  </ActivityDeleteDecorator>
-                                </View>
-                              )}
-                              style={styles.activityItem}
-                              onPress={() =>
-                                handleNavigateToActivity(activity.id)
-                              }
-                            >
-                              <View>
-                                <Txt style={styles.activityTitle}>
-                                  {category?.name || 'N/A'}
-                                </Txt>
-                                {subcategoryName && (
-                                  <Txt style={styles.activitySubtitle}>
-                                    {subcategoryName}
-                                  </Txt>
+                          return (
+                            <View key={activity.id}>
+                              <HorizontalSwiper
+                                HorizontalSwipeViewProps={{
+                                  config: { isRightSwipeDisabled: true },
+                                  onPress: () =>
+                                    handleNavigateToActivity(activity.id),
+                                }}
+                                lastActionButtonStyle={swipableListItemLastActionButton(
+                                  theme,
+                                  {
+                                    isFirst: index === 0,
+                                    isLast: index === array.length - 1,
+                                  },
                                 )}
-                              </View>
-                              {activity.isBookmark && (
-                                <Icon
-                                  name="bookmark"
-                                  size={18}
-                                  style={styles.bookmark}
-                                />
-                              )}
-                            </HorizontalSwipeView>
-                          </View>
-                        );
-                      })}
+                                rightActions={['bookmark', 'update', 'delete']}
+                                onBookmark={() => activity.toggleBookmark()}
+                                onDelete={() => handleDelete(activity.id)}
+                                onUpdate={() =>
+                                  handleUpdateActivity(activity.id)
+                                }
+                              >
+                                <View
+                                  style={[
+                                    styles.activityItem,
+                                    listItemStyle(theme, {
+                                      isFirst: index === 0,
+                                      isLast: index === array.length - 1,
+                                    }),
+                                  ]}
+                                >
+                                  <View>
+                                    <Txt
+                                      fontWeight="bold"
+                                      style={styles.activityTitle}
+                                    >
+                                      {category?.name || 'N/A'}
+                                    </Txt>
+                                    {subcategoryName && (
+                                      <Txt style={styles.activitySubtitle}>
+                                        {subcategoryName}
+                                      </Txt>
+                                    )}
+                                  </View>
+                                  {activity.isBookmark && (
+                                    <View style={styles.bookmark}>
+                                      <Icon
+                                        color={
+                                          theme.colors.primary.contrastText
+                                        }
+                                        name="bookmark"
+                                        size={18}
+                                      />
+                                    </View>
+                                  )}
+                                </View>
+                              </HorizontalSwiper>
+                            </View>
+                          );
+                        })}
+                      </View>
                     </View>
-                  </View>
-                );
-              })}
+                  );
+                })}
+              </View>
+            );
+          }}
+          renderSectionHeader={({ section }) => (
+            <View style={styles.sectionHeader}>
+              <Txt fontWeight="black" style={styles.sectionHeaderTitle}>
+                {section.year}
+              </Txt>
             </View>
-          );
-        }}
-        renderSectionHeader={({ section }) => (
-          <Txt style={styles.sectionHeader}>{section.year}</Txt>
-        )}
-        sections={sectionListData}
-      />
-    </>
+          )}
+          sections={sectionListData}
+        />
+      )}
+    </ActivityDeleteDecorator>
   );
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
   activitiesGroup: {
-    // width: '100%',
     flex: 1,
   },
   activityItem: {
-    ...card,
     paddingHorizontal: 16,
     paddingVertical: 10,
-    width: '100%',
-    zIndex: 10,
-  },
-  activityItemActionButton: {
-    padding: 10,
-  },
-  activityItemActionsContainer: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    paddingHorizontal: 10,
-    position: 'absolute',
-    right: 0,
-    zIndex: 5,
-  },
-  activityItemContainer: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    marginBottom: 6,
-    position: 'relative',
-    width: '100%',
   },
   activitySubtitle: {
-    color: 'grey',
+    color: theme.colors.secondary.default,
     fontSize: 16,
   },
   activityTitle: {
     fontSize: 18,
   },
   bookmark: {
+    backgroundColor: theme.colors.primary.default,
+    bottom: -1,
+    justifyContent: 'center',
+    paddingHorizontal: 4,
     position: 'absolute',
     right: 10,
-    top: -2,
+    top: -1,
   },
   group: {
-    // flexDirection: 'row',
+    marginBottom: 12,
   },
   groupHeader: {
+    marginBottom: 6,
+  },
+  groupHeaderTitle: {
     fontSize: 24,
   },
   section: {
     marginBottom: 10,
   },
   sectionHeader: {
-    fontSize: 40,
-    marginBottom: 10,
+    alignSelf: 'flex-start',
+    backgroundColor: theme.colors.surface.default,
+    borderBottomRightRadius: 16,
+    borderTopRightRadius: 16,
+    marginBottom: 5,
+    paddingRight: 14,
   },
-});
+  sectionHeaderTitle: {
+    color: theme.colors.surface.contrastText,
+    fontSize: 40,
+  },
+}));

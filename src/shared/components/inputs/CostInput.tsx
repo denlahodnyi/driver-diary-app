@@ -4,6 +4,7 @@ import {
   mask,
 } from 'react-native-mask-text';
 import getSymbolFromCurrency from 'currency-symbol-map';
+import { useStyles } from 'react-native-unistyles';
 import { toArray } from '~/shared/utils';
 import {
   inputBaseContainer,
@@ -13,6 +14,7 @@ import {
   inputBaseLabel,
 } from '~/app/styles';
 import HeadlessInput, { type HeadlessInputProps } from './HeadlessInput';
+import useFocusedInput from './useFocusedInput';
 
 type CurrencyInputProps = HeadlessInputProps<MaskedTextInputProps>;
 
@@ -37,6 +39,9 @@ export const maskCurrency = (
   });
 
 export default function CurrencyInput(props: CurrencyInputProps) {
+  const { theme } = useStyles();
+  const focused = useFocusedInput();
+
   return (
     <HeadlessInput<MaskedTextInputProps>
       {...props}
@@ -45,21 +50,23 @@ export default function CurrencyInput(props: CurrencyInputProps) {
         style: [inputBaseContainer, ...toArray(props.containerProps?.style)],
       }}
       errorProps={{
-        style: [inputBaseError, ...toArray(props.errorProps?.style)],
+        style: [inputBaseError(theme), ...toArray(props.errorProps?.style)],
       }}
       inputWrapperProps={{
         style: [
-          inputBaseInputWrapper,
+          inputBaseInputWrapper(theme),
+          focused.inputStyle,
           ...toArray(props.inputWrapperProps?.style),
         ],
       }}
       keyboardType="numeric"
       labelProps={{
-        style: [inputBaseLabel, ...toArray(props.labelProps?.style)],
+        style: [inputBaseLabel(), ...toArray(props.labelProps?.style)],
       }}
       options={maskOptions}
-      style={[inputBaseInput, ...toArray(props?.style)]}
+      style={[inputBaseInput(theme), ...toArray(props?.style)]}
       type="currency"
+      {...focused.props}
     />
   );
 }

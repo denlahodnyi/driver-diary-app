@@ -2,6 +2,7 @@
 import { View } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { type Theme, useTheme } from '@react-navigation/native';
 import {
   ActivitiesStats,
   Activity,
@@ -24,16 +25,30 @@ import { Icon } from '~/shared/components';
 import type { ActivitiesTabsParamsList, RootStackParamsList } from './types';
 import { useStorageString } from '../storage';
 import { ErrorWrapper } from '../containers';
+import { appFonts } from '../styles';
 
 const { Navigator, Screen } = createNativeStackNavigator<RootStackParamsList>();
 const Tab = createBottomTabNavigator<ActivitiesTabsParamsList>();
 
+const commonScreenOptions = {
+  headerTitleStyle: {
+    fontFamily: appFonts.Poppins.medium,
+    fontSize: 20,
+  },
+};
+
+const getTabIconColor = (isFocused: boolean, navigatorTheme: Theme) =>
+  isFocused ? '#000' : navigatorTheme.colors.text;
+
 function ActivitiesNavigator() {
+  const navigatorTheme = useTheme();
+
   return (
     <Tab.Navigator
       backBehavior="none"
       initialRouteName="Feed"
       screenOptions={{
+        ...commonScreenOptions,
         headerLeft: () => (
           <View style={{ paddingLeft: 10 }}>
             <HeaderVehiclesLink />
@@ -52,7 +67,13 @@ function ActivitiesNavigator() {
         name="Feed"
         options={{
           tabBarAccessibilityLabel: 'Feed',
-          tabBarIcon: () => <Icon name="list" size={30} />,
+          tabBarIcon: ({ focused }) => (
+            <Icon
+              color={getTabIconColor(focused, navigatorTheme)}
+              name="list"
+              size={30}
+            />
+          ),
         }}
       />
       <Tab.Screen
@@ -60,7 +81,13 @@ function ActivitiesNavigator() {
         name="Bookmarks"
         options={{
           tabBarAccessibilityLabel: 'Bookmarks',
-          tabBarIcon: () => <Icon name="bookmarks" size={30} />,
+          tabBarIcon: ({ focused }) => (
+            <Icon
+              color={getTabIconColor(focused, navigatorTheme)}
+              name="bookmarks"
+              size={30}
+            />
+          ),
         }}
       />
       <Tab.Screen
@@ -68,7 +95,13 @@ function ActivitiesNavigator() {
         name="Stats"
         options={{
           tabBarAccessibilityLabel: 'Statistics',
-          tabBarIcon: () => <Icon name="pie-chart" size={30} />,
+          tabBarIcon: ({ focused }) => (
+            <Icon
+              color={getTabIconColor(focused, navigatorTheme)}
+              name="pie-chart"
+              size={30}
+            />
+          ),
         }}
       />
     </Tab.Navigator>
@@ -82,6 +115,7 @@ export default function RootNavigator() {
     <ErrorWrapper>
       <Navigator
         initialRouteName={selectedVehicleId ? 'Activities' : 'Vehicles'}
+        screenOptions={commonScreenOptions}
       >
         <>
           <Screen
