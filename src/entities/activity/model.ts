@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Q } from '@nozbe/watermelondb';
 import { catchError, iif, map, of, switchMap } from 'rxjs';
 import { bind } from '@react-rxjs/core';
-import { groupBy } from 'lodash';
+import groupBy from 'lodash/groupBy';
 import dayjs from 'dayjs';
 import { storage, useStorageString } from '~/app/storage';
 import {

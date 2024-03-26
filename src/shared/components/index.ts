@@ -4,7 +4,7 @@ export {
   type VerticalTextProps,
 } from './text/VerticalText';
 export { default as Icon, type IconProps } from './Icon';
-export { default as HorizontalSwipeView } from './HorizontalSwipeView';
+export { HorizontalSwiper } from './swipe';
 export {
   CostInput,
   HeadlessInput,
@@ -17,3 +17,4 @@ export {
 } from './inputs';
 export { Modalka } from './modals';
 export { RangeDatePicker, type RangeDatePickerProps } from './dates';
+export { Button } from './buttons';

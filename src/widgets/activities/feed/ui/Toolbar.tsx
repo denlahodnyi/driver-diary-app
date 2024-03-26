@@ -1,12 +1,12 @@
 import { useMemo, useState } from 'react';
 import {
   type StyleProp,
-  StyleSheet,
   TouchableOpacity,
   View,
   type ViewStyle,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { Icon } from '~/shared/components';
 import { toArray } from '~/shared/utils';
 import {
@@ -46,6 +46,7 @@ function Toolbar(props: ToolbarProps) {
     viewSwitcherType,
   } = props;
   const navigation = useNavigation();
+  const { styles, theme } = useStyles(stylesheet);
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
 
   const modalFiltersFromProp = useMemo<ModalFiltersState>(() => {
@@ -90,13 +91,15 @@ function Toolbar(props: ToolbarProps) {
     }
   };
 
+  const getIconColor = () => theme.colors.surface.contrastText;
+
   return (
     <View style={[styles.container, ...toArray(containerStyle)]}>
       <TouchableOpacity
         accessibilityLabel="Add new activity"
         onPress={handleAddActivity}
       >
-        <Icon name="add" size={25} />
+        <Icon color={getIconColor()} name="add" size={25} />
       </TouchableOpacity>
       <>
         <View style={styles.divider} />
@@ -105,6 +108,7 @@ function Toolbar(props: ToolbarProps) {
           onPress={handleViewToggle}
         >
           <Icon
+            color={getIconColor()}
             name={
               viewSwitcherType === 'calendar'
                 ? 'list-outline'
@@ -121,7 +125,7 @@ function Toolbar(props: ToolbarProps) {
             accessibilityLabel="Show sorting settings"
             onPress={handleToggleSortSettings}
           >
-            <Icon name="options" size={25} />
+            <Icon color={getIconColor()} name="options" size={25} />
           </TouchableOpacity>
           <ActivitiesFiltersModal
             selectedFilters={modalFiltersFromProp}
@@ -137,19 +141,19 @@ function Toolbar(props: ToolbarProps) {
 
 export default Toolbar;
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
   container: {
     alignSelf: 'stretch',
-    backgroundColor: '#FFF',
+    backgroundColor: theme.colors.surface.default,
     borderRadius: 10,
     flexDirection: 'row',
     paddingHorizontal: 12,
     paddingVertical: 6,
   },
   divider: {
-    borderColor: '#CECECE',
+    borderColor: theme.colors.grey[100],
     borderLeftWidth: 1,
     height: '100%',
     marginHorizontal: 8,
   },
-});
+}));

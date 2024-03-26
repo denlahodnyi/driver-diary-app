@@ -1,19 +1,20 @@
 import { useCallback, useState } from 'react';
-import { StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
+import { ScrollView, TouchableOpacity, View } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import dayjs from 'dayjs';
+import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import type { NavTypes } from '~/app/navigation';
-import { card, screenPaddings } from '~/app/styles';
+import { listItem, screenPaddings } from '~/app/styles';
 import { vehicleModel } from '~/entities/vehicle';
 import { categoryLib } from '~/entities/category';
 import { Txt } from '~/shared/components';
 import type { Activity } from 'db';
 
-// TODO: add empty message
 export default function Bookmarks(
   props: NavTypes.ActivitiesScreenProps<'Bookmarks'>,
 ) {
   const { navigation } = props;
+  const { styles, theme } = useStyles(stylesheet);
   const [vehicle] = vehicleModel.useCurrentVehicle();
   const [bookmarks, setBookmarks] = useState<Activity[]>([]);
 
@@ -37,9 +38,17 @@ export default function Bookmarks(
     }, [vehicle]),
   );
 
+  if (!bookmarks.length) {
+    return (
+      <View style={[screenPaddings, styles.screenCentered]}>
+        <Txt style={styles.emptyListMessage}>You have no bookmarks</Txt>
+      </View>
+    );
+  }
+
   return (
-    <View style={screenPaddings}>
-      {bookmarks.map((bookmark) => {
+    <ScrollView style={screenPaddings}>
+      {bookmarks.map((bookmark, i, array) => {
         const category = categoryLib.findCategoryById(bookmark.categoryId);
         const categoryName = category
           ? category.subcategories.find(
@@ -48,8 +57,12 @@ export default function Bookmarks(
           : null;
 
         return (
-          <TouchableWithoutFeedback
+          <TouchableOpacity
             key={bookmark.id}
+            style={listItem(theme, {
+              isFirst: i === 0,
+              isLast: i === array.length - 1,
+            })}
             onPress={() =>
               navigation.navigate('Activity', {
                 activityId: bookmark.id,
@@ -57,9 +70,11 @@ export default function Bookmarks(
               })
             }
           >
-            <View style={styles.item}>
+            <View style={styles.itemContent}>
               <View>
-                <Txt style={styles.itemTitle}>{category?.name || 'N/A'}</Txt>
+                <Txt fontWeight="bold" style={styles.itemTitle}>
+                  {category?.name || 'N/A'}
+                </Txt>
                 {categoryName && (
                   <Txt style={styles.itemSubtitle}>{categoryName}</Txt>
                 )}
@@ -68,32 +83,36 @@ export default function Bookmarks(
                 {dayjs(bookmark.date).format('DD MMM YYYY')}
               </Txt>
             </View>
-          </TouchableWithoutFeedback>
+          </TouchableOpacity>
         );
       })}
-    </View>
+    </ScrollView>
   );
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
   dateTxt: {
-    lineHeight: 18,
+    lineHeight: 24,
   },
-  item: {
-    ...card,
+  emptyListMessage: {
+    color: theme.colors.text.secondary,
+    fontSize: 18,
+  },
+  itemContent: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 12,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    width: '100%',
   },
   itemSubtitle: {
-    color: 'grey',
+    color: theme.colors.text.secondary,
     fontSize: 16,
   },
   itemTitle: {
     fontSize: 18,
-    lineHeight: 18,
+    lineHeight: 24,
   },
-});
+  screenCentered: {
+    alignItems: 'center',
+    flex: 1,
+    justifyContent: 'center',
+  },
+}));

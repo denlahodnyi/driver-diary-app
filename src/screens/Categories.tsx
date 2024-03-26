@@ -1,4 +1,5 @@
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
+import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { screenPaddings } from '~/app/styles';
 import { Txt } from '~/shared/components';
 import type { NavTypes } from '~/app/navigation';
@@ -9,6 +10,7 @@ const sorted = categoriesWithIds.sort((a, b) => (a.name > b.name ? 1 : -1));
 function Categories(props: NavTypes.RootStackScreenProps<'Categories'>) {
   const { navigation, route } = props;
   const mode = route.params.mode;
+  const { styles } = useStyles(stylesheet);
 
   return (
     <View style={screenPaddings}>
@@ -40,13 +42,13 @@ function Categories(props: NavTypes.RootStackScreenProps<'Categories'>) {
 
 export default Categories;
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
   listItem: {
     borderBottomWidth: 1,
-    borderColor: 'grey',
-    paddingVertical: 6,
+    borderColor: theme.colors.grey[200],
+    paddingVertical: 10,
   },
   listItemTitle: {
-    fontSize: 20,
+    fontSize: 22,
   },
-});
+}));

@@ -1,4 +1,5 @@
 import { type TextInputProps } from 'react-native';
+import { useStyles } from 'react-native-unistyles';
 import {
   inputBaseContainer,
   inputBaseError,
@@ -8,6 +9,7 @@ import {
 } from '~/app/styles';
 import { toArray } from '~/shared/utils';
 import HeadlessInput, { type HeadlessInputProps } from './HeadlessInput';
+import useFocusedInput from './useFocusedInput';
 
 export type InputProps<T extends object = TextInputProps> =
   HeadlessInputProps<T>;
@@ -15,6 +17,9 @@ export type InputProps<T extends object = TextInputProps> =
 export default function Input<T extends TextInputProps = TextInputProps>(
   props: InputProps<T>,
 ) {
+  const focused = useFocusedInput();
+  const { theme } = useStyles();
+
   return (
     <HeadlessInput
       {...props}
@@ -22,18 +27,20 @@ export default function Input<T extends TextInputProps = TextInputProps>(
         style: [inputBaseContainer, ...toArray(props.containerProps?.style)],
       }}
       errorProps={{
-        style: [inputBaseError, ...toArray(props.errorProps?.style)],
+        style: [inputBaseError(theme), ...toArray(props.errorProps?.style)],
       }}
       inputWrapperProps={{
         style: [
-          inputBaseInputWrapper,
+          inputBaseInputWrapper(theme),
+          focused.inputStyle,
           ...toArray(props.inputWrapperProps?.style),
         ],
       }}
       labelProps={{
-        style: [inputBaseLabel, ...toArray(props.labelProps?.style)],
+        style: [inputBaseLabel(), ...toArray(props.labelProps?.style)],
       }}
-      style={[inputBaseInput, ...toArray(props?.style)]}
+      style={[inputBaseInput(theme), ...toArray(props?.style)]}
+      {...focused.props}
     />
   );
 }

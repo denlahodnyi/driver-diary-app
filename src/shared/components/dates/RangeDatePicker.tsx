@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import {
   type StyleProp,
-  StyleSheet,
   TouchableOpacity,
   View,
   type ViewStyle,
 } from 'react-native';
 import DatePicker, { type DatePickerProps } from 'react-native-date-picker';
+import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import dayjs from 'dayjs';
 import { APP_MIN_DATE_STR } from '~/app/constants';
 import { toArray } from '~/shared/utils';
 import Txt from '../text/Txt';
@@ -43,6 +44,7 @@ export default function RangeDatePicker(props: RangeDatePickerProps) {
     onConfirm,
     pickerContainerStyle,
   } = props;
+  const { styles, theme } = useStyles(stylesheet);
 
   const [openedDatePicker, setOpenedDatePicker] = useState<
     false | DatePickerType
@@ -144,7 +146,11 @@ export default function RangeDatePicker(props: RangeDatePickerProps) {
         style={styles.pickerResetButton}
         onPress={() => resetDate(pickerType)}
       >
-        <Icon name="close-circle-outline" size={24} />
+        <Icon
+          color={theme.colors.primary.default}
+          name="close-circle-outline"
+          size={24}
+        />
       </TouchableOpacity>
     );
   };
@@ -156,8 +162,8 @@ export default function RangeDatePicker(props: RangeDatePickerProps) {
     >
       <Txt style={styles.pickerText}>
         {dates[`${pickerType}Modified`]
-          ? dates[pickerType].toLocaleDateString()
-          : `${pickerType} date`}
+          ? dayjs(dates[pickerType]).format('DD MMM YYYY')
+          : 'Press to select'}
       </Txt>
     </TouchableOpacity>
   );
@@ -166,15 +172,18 @@ export default function RangeDatePicker(props: RangeDatePickerProps) {
     <>
       <View style={[styles.pickersContainer, ...toArray(pickerContainerStyle)]}>
         <View style={styles.pickerContainer}>
-          {renderDatePickerButton('start')}
-          {dates.startModified && renderDatePickerResetButton('start')}
+          <Txt style={styles.pickerLabel}>Start date:</Txt>
+          <View style={styles.pickerActionsContainer}>
+            {renderDatePickerButton('start')}
+            {dates.startModified && renderDatePickerResetButton('start')}
+          </View>
         </View>
-        <View>
-          <Txt accessible={false}>–</Txt>
-        </View>
-        <View style={styles.pickerContainer}>
-          {renderDatePickerButton('end')}
-          {dates.endModified && renderDatePickerResetButton('end')}
+        <View style={[styles.pickerContainer, styles.pickerContainerDivided]}>
+          <Txt style={styles.pickerLabel}>End date:</Txt>
+          <View style={styles.pickerActionsContainer}>
+            {renderDatePickerButton('end')}
+            {dates.endModified && renderDatePickerResetButton('end')}
+          </View>
         </View>
       </View>
       <DatePicker
@@ -195,20 +204,33 @@ export default function RangeDatePicker(props: RangeDatePickerProps) {
   );
 }
 
-const styles = StyleSheet.create({
-  pickerContainer: {
+const stylesheet = createStyleSheet((theme) => ({
+  pickerActionsContainer: {
     flexDirection: 'row',
+  },
+  pickerContainer: {
+    flex: 1,
+    paddingHorizontal: 4,
+    paddingVertical: 2,
+  },
+  pickerContainerDivided: {
+    borderColor: theme.colors.secondary.default,
+    borderLeftWidth: 1,
+  },
+  pickerLabel: {
+    color: theme.colors.text.secondary,
   },
   pickerResetButton: {
     marginLeft: 10,
   },
   pickerText: {
-    fontSize: 20,
-    textDecorationLine: 'underline',
+    fontSize: 18,
   },
   pickersContainer: {
     alignItems: 'center',
+    borderColor: theme.colors.secondary.default,
+    borderRadius: 6,
+    borderWidth: 1,
     flexDirection: 'row',
-    gap: 14,
   },
-});
+}));

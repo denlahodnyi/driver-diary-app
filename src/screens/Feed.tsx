@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
+import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { screenPaddings } from '~/app/styles';
 import {
   ActivitiesToolbar,
@@ -10,6 +11,7 @@ import { activityModel } from '~/entities/activity';
 import { Txt } from '~/shared/components';
 
 export default function Feed() {
+  const { styles } = useStyles(stylesheet);
   const [view, setView] =
     useState<ActivitiesToolbar['ToolbarViewType']>('timeline');
   const [activities, { options, setOptions }] = activityModel.useActivities();
@@ -22,7 +24,7 @@ export default function Feed() {
         <View style={styles.floatingToolbarContainer}>
           <ActivitiesToolbar containerStyle={styles.floatingToolbar} />
         </View>
-        <Txt>You have no activities yet</Txt>
+        <Txt style={styles.emptyListMessage}>You have no activities yet</Txt>
       </View>
     );
   }
@@ -48,9 +50,13 @@ export default function Feed() {
   );
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
+  emptyListMessage: {
+    color: theme.colors.text.secondary,
+    fontSize: 18,
+  },
   floatingToolbar: {
-    shadowColor: '#CECECE',
+    // shadowColor: '#CECECE',
     shadowOffset: {
       height: 0,
       width: 0,
@@ -78,4 +84,4 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
-});
+}));

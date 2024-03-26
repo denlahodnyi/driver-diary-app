@@ -1,12 +1,22 @@
 import { MMKV, useMMKVString } from 'react-native-mmkv';
+import { CURRENCY_CODE } from '../constants';
+import type { StyleTypes } from '../styles';
 
-type StringKeys = 'selectedVehicleId' | 'currencyCode';
+export type PrefUserTheme = StyleTypes.AppThemeNames | 'auto';
+
+type StringKeys = 'selectedVehicleId' | 'currencyCode' | 'colorTheme';
 type NumberKeys = never;
 type BooleanKeys = never;
 type BufferKeys = never;
 type Keys = StringKeys | NumberKeys | BooleanKeys | BufferKeys;
 
-type SetterValue<T> = T extends NumberKeys
+type UserThemeOrStrValue<T extends string> = T extends 'colorTheme'
+  ? PrefUserTheme
+  : string;
+
+type SetterValue<T> = T extends 'colorTheme'
+  ? PrefUserTheme
+  : T extends NumberKeys
   ? number
   : T extends BooleanKeys
   ? boolean
@@ -19,8 +29,8 @@ class Storage extends MMKV {
     return super.set(key, value);
   }
 
-  getString(key: StringKeys) {
-    return super.getString(key);
+  getString<T extends StringKeys>(key: T) {
+    return super.getString(key) as UserThemeOrStrValue<T> | undefined;
   }
 
   getNumber(key: NumberKeys) {
@@ -44,6 +54,24 @@ class Storage extends MMKV {
 
 export const storage = new Storage();
 
-export function useStorageString(key: Keys, instance?: Storage) {
-  return useMMKVString(key, instance);
+export function useStorageString<T extends Keys>(key: T, instance?: Storage) {
+  return useMMKVString(key, instance) as [
+    value: UserThemeOrStrValue<T> | undefined,
+    setValue: (
+      value:
+        | UserThemeOrStrValue<T>
+        | ((
+            current: UserThemeOrStrValue<T> | undefined,
+          ) => UserThemeOrStrValue<T> | undefined),
+    ) => void,
+  ];
+}
+
+export function setInitialStorageData() {
+  if (!storage.getString('currencyCode')) {
+    storage.set('currencyCode', CURRENCY_CODE);
+  }
+  if (!storage.getString('colorTheme')) {
+    storage.set('colorTheme', 'light');
+  }
 }

@@ -2,12 +2,12 @@ import {
   Modal,
   type ModalProps,
   type StyleProp,
-  StyleSheet,
   TouchableWithoutFeedback,
   View,
   type ViewProps,
   type ViewStyle,
 } from 'react-native';
+import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { toArray } from '~/shared/utils';
 
 type ModalkaProps = ModalProps & {
@@ -28,6 +28,7 @@ export default function Modalka(props: ModalkaProps) {
     onClose,
     ...rest
   } = props;
+  const { styles } = useStyles(stylesheet);
 
   return (
     <Modal transparent animationType="fade" onRequestClose={onClose} {...rest}>
@@ -46,7 +47,7 @@ export default function Modalka(props: ModalkaProps) {
   );
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
   backdrop: {
     backgroundColor: 'rgba(0, 0, 0, 0.35)',
     bottom: 0,
@@ -63,7 +64,7 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   content: {
-    backgroundColor: '#FFF',
+    backgroundColor: theme.colors.surface.default,
     borderRadius: 6,
     elevation: 5,
     padding: 20,
@@ -76,4 +77,4 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     zIndex: 2,
   },
-});
+}));

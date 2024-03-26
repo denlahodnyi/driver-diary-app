@@ -1,8 +1,9 @@
 import { useCallback, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { type StyleProp, type TextStyle, View } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { LineChart, type lineDataItem } from 'react-native-gifted-charts';
 import dayjs from 'dayjs';
+import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { screenPaddings } from '~/app/styles';
 import { activityModel } from '~/entities/activity';
 import {
@@ -43,7 +44,10 @@ const formatDate = (obj: {
   return daysJsObj.format('YYYY');
 };
 
-const prepareChartData = (arr: activityModel.CostReportDataItem[]) => {
+const prepareChartData = (
+  arr: activityModel.CostReportDataItem[],
+  styles: { dataPointLabelText: StyleProp<TextStyle> },
+) => {
   return arr.reduce<{ data: ChartDataItem[]; maxValue: number }>(
     (prev, reportDataItem) => {
       return {
@@ -73,6 +77,7 @@ const prepareChartData = (arr: activityModel.CostReportDataItem[]) => {
 };
 
 export default function ExpenditureStats() {
+  const { styles, theme } = useStyles(stylesheet);
   const [dates, setDates] = useState<DatesState>({ end: null, start: null });
   const [categoryIds, setCategoryIds] = useState<string[]>([]);
   const [chartData, setChartData] = useState<ChartDataState>({
@@ -98,6 +103,7 @@ export default function ExpenditureStats() {
                 ? result.currencyCodes.map((code, i) => {
                     const { data, maxValue: max } = prepareChartData(
                       result.byCurrencyCode[code],
+                      styles,
                     );
 
                     maxValue = Math.max(maxValue, max);
@@ -121,7 +127,7 @@ export default function ExpenditureStats() {
       };
 
       fetchAnalysis();
-    }, [categoryIds, dates.end, dates.start]),
+    }, [categoryIds, dates.end, dates.start, styles]),
   );
 
   return (
@@ -147,6 +153,7 @@ export default function ExpenditureStats() {
           isAnimated
           showStripOnFocus
           showVerticalLines
+          dataPointsColor={theme.colors.primary.default}
           dataPointsRadius={5}
           dataSet={chartData.dataSets}
           height={400}
@@ -156,15 +163,22 @@ export default function ExpenditureStats() {
           overflowTop={20}
           spacing={100}
           stepValue={chartData.maxValue / yAxisSpaceSectionsNum}
-          stripColor={'#000'}
+          stripColor={theme.colors.secondary.default}
+          xAxisColor={theme.colors.secondary.dark}
+          xAxisLabelTextStyle={styles.axisText}
+          yAxisColor={theme.colors.secondary.dark}
           yAxisExtraHeight={30}
+          yAxisTextStyle={styles.axisText}
         />
       </View>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
+  axisText: {
+    color: theme.colors.secondary.dark,
+  },
   chartWrapper: {
     width: '100%',
   },
@@ -177,4 +191,4 @@ const styles = StyleSheet.create({
   filtersContainer: {
     marginBottom: 20,
   },
-});
+}));

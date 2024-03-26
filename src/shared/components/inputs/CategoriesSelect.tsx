@@ -26,7 +26,7 @@ export default function CategoriesSelect<TIsMultiple extends boolean = false>(
       optionLabel="name"
       optionValue="id"
       options={categories}
-      placeholder="Select an categories..."
+      placeholder="Select categories..."
       selectedValue={value}
       onValueChange={onChange}
     />
