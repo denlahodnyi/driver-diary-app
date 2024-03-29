@@ -28,4 +28,9 @@ export default class Vehicle extends Model {
   @lazy bookmarkedActivities = this.activities.extend(
     Q.where('is_bookmark', true),
   );
+
+  async destroyPermanently(): Promise<void> {
+    await this.activities.destroyAllPermanently();
+    await super.destroyPermanently();
+  }
 }

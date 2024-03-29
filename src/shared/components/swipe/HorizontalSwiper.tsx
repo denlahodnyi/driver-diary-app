@@ -33,7 +33,12 @@ type HorizontalSwiperProps = {
   children: React.ReactNode;
 };
 
-export default function HorizontalSwiper(props: HorizontalSwiperProps) {
+type HorizontalSwiper = {
+  ActionFn: ActionFn;
+  Props: HorizontalSwiperProps;
+};
+
+function HorizontalSwiper(props: HorizontalSwiperProps) {
   const {
     HorizontalSwipeViewProps,
     actionButtonStyle,
@@ -205,6 +210,9 @@ export default function HorizontalSwiper(props: HorizontalSwiperProps) {
     </View>
   );
 }
+
+export default HorizontalSwiper;
+
 const stylesheet = createStyleSheet((theme) => ({
   actionButton: {
     backgroundColor: theme.colors.primary.default,

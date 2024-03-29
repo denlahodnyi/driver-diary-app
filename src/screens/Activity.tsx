@@ -31,6 +31,7 @@ import {
 import { ActivityDeleteDecorator } from '~/features/activities/delete';
 import { activityModel } from '~/entities/activity';
 import { categoryLib } from '~/entities/category';
+import { ActivityCopyButton } from '~/features/activities/copy';
 import type { Activity as ActivityModel } from 'db';
 
 const MIN_DATE = new Date(APP_MIN_DATE_STR);
@@ -139,6 +140,24 @@ export default function Activity(
       }
     },
     [activityData, adaptRecordDataToForm],
+  );
+
+  const copiedActivityId =
+    route.params.mode === 'create' && route.params.copiedActivityId;
+
+  useEffect(
+    function settleClonedActivity() {
+      if (copiedActivityId) {
+        (async () => {
+          const activity = await activityModel.getActivityById(
+            copiedActivityId,
+          );
+
+          if (activity) setForm(adaptRecordDataToForm(activity));
+        })();
+      }
+    },
+    [adaptRecordDataToForm, copiedActivityId],
   );
 
   const handleSave = async () => {
@@ -353,10 +372,10 @@ export default function Activity(
       {form.subcategoryName && (
         <Txt style={styles.subTitle}>{form.subcategoryName}</Txt>
       )}
-      <View style={[styles.section, { alignItems: 'center' }]}>
+      <View style={[styles.section, styles.auxiliaryActions]}>
         <TouchableOpacity
           accessibilityLabel="Toggle bookmark"
-          style={styles.bookmarkButton}
+          style={styles.auxiliaryActionButton}
           onPress={() => {
             activityData?.toggleBookmark();
           }}
@@ -367,6 +386,13 @@ export default function Activity(
             size={50}
           />
         </TouchableOpacity>
+        {!!activityData && (
+          <ActivityCopyButton
+            activityId={activityData.id}
+            categoryId={activityData.categoryId}
+            style={styles.auxiliaryActionButton}
+          />
+        )}
       </View>
       <View style={styles.section}>
         <View
@@ -438,8 +464,14 @@ const stylesheet = createStyleSheet((theme) => ({
     gap: 6,
     justifyContent: 'center',
   },
-  bookmarkButton: {
+  auxiliaryActionButton: {
     ...buttonBase,
+  },
+  auxiliaryActions: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 2,
+    justifyContent: 'center',
   },
   container: {
     paddingHorizontal: SCREEN_X_PADDING,

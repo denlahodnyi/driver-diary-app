@@ -4,7 +4,7 @@ export {
   type VerticalTextProps,
 } from './text/VerticalText';
 export { default as Icon, type IconProps } from './Icon';
-export { HorizontalSwiper } from './swipe';
+export { HorizontalSwiper, SwiperActionButton } from './swipe';
 export {
   CostInput,
   HeadlessInput,
