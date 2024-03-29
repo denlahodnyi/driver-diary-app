@@ -5,7 +5,11 @@ type SwiperActionButtonProps = {
   iconName: string;
 } & TouchableOpacityProps;
 
-export default function SwiperActionButton(props: SwiperActionButtonProps) {
+type SwiperActionButton = {
+  Props: SwiperActionButtonProps;
+};
+
+function SwiperActionButton(props: SwiperActionButtonProps) {
   const { iconName, ...rest } = props;
 
   return (
@@ -14,3 +18,5 @@ export default function SwiperActionButton(props: SwiperActionButtonProps) {
     </TouchableOpacity>
   );
 }
+
+export default SwiperActionButton;

@@ -9,10 +9,12 @@ import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 export type RootStackParamsList = {
   Activities: NavigatorScreenParams<ActivitiesTabsParamsList>;
   ActivitiesStats: undefined;
+  /* eslint-disable @typescript-eslint/member-ordering */
   Activity:
-    | { activityId: string; mode: 'view' }
-    | { mode: 'create'; newCategoryId: string }
-    | { newCategoryId?: string; activityId: string; mode: 'update' };
+    | { mode: 'view'; activityId: string }
+    | { mode: 'create'; newCategoryId: string; copiedActivityId?: string }
+    | { mode: 'update'; activityId: string; newCategoryId?: string };
+  /* eslint-enable @typescript-eslint/member-ordering */
   Categories: { mode: 'create' } | { activityId: string; mode: 'update' };
   ExpenditureStats: undefined;
   Settings: undefined;

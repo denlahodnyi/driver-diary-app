@@ -19,3 +19,5 @@ jest.mock(
     );
   },
 );
+// required for react-native-unistyles
+jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter');

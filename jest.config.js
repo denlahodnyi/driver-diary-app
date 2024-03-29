@@ -38,6 +38,6 @@ module.exports = {
     ],
   },
   transformIgnorePatterns: [
-    '/node_modules/(?!(@react-rxjs|@rx-state|@react-native|react-native|react-native-vector-icons|react-native-date-picker|react-native-picker-select)/)',
+    '/node_modules/(?!(@react-rxjs|@rx-state|@react-native|react-native|react-native-vector-icons|react-native-date-picker|react-native-picker-select|react-native-calendars|react-native-swipe-gestures|@pietile-native-kit/keyboard-aware-scrollview|react-native-gifted-charts)/)',
   ],
 };

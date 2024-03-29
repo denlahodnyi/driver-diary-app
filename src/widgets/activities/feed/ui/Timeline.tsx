@@ -9,6 +9,7 @@ import {
 } from '~/app/styles';
 import { HorizontalSwiper, Icon, Txt } from '~/shared/components';
 import { ActivityDeleteDecorator } from '~/features/activities/delete';
+import { SwiperActivityCopyButton } from '~/features/activities/copy';
 import { activityLib } from '~/entities/activity';
 import { categoryLib } from '~/entities/category';
 import type { Activity } from 'db';
@@ -16,6 +17,21 @@ import type { Activity } from 'db';
 type TimelineProps = {
   activities: Activity[];
 };
+
+function DuplicateButton(
+  props: { activityId: string; categoryId: string } & Parameters<
+    HorizontalSwiper['ActionFn']
+  >[0],
+) {
+  return (
+    <SwiperActivityCopyButton
+      activityId={props.activityId}
+      afterAction={props.renderParam.resetSwipedState}
+      categoryId={props.categoryId}
+      style={props.style}
+    />
+  );
+}
 
 export default function Timeline(props: TimelineProps) {
   const { activities } = props;
@@ -87,7 +103,19 @@ export default function Timeline(props: TimelineProps) {
                                     isLast: index === array.length - 1,
                                   },
                                 )}
-                                rightActions={['bookmark', 'update', 'delete']}
+                                rightActions={[
+                                  ({ renderParam, style }) => (
+                                    <DuplicateButton
+                                      activityId={activity.id}
+                                      categoryId={activity.categoryId}
+                                      renderParam={renderParam}
+                                      style={style}
+                                    />
+                                  ),
+                                  'bookmark',
+                                  'update',
+                                  'delete',
+                                ]}
                                 onBookmark={() => activity.toggleBookmark()}
                                 onDelete={() => handleDelete(activity.id)}
                                 onUpdate={() =>
