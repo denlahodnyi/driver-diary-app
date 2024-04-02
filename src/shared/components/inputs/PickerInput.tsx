@@ -46,6 +46,7 @@ export default function PickerInput(props: PickerInputProps) {
           ...props.style,
         },
       }}
+      useNativeAndroidPickerStyle={false}
     />
   );
 }

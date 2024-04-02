@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { SafeAreaView, View } from 'react-native';
+import { View } from 'react-native';
 import {
   NavigationContainer,
   useNavigationContainerRef,
@@ -7,6 +7,7 @@ import {
 import { useFlipper } from '@react-navigation/devtools';
 import { DatabaseProvider } from '@nozbe/watermelondb/react';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import BootSplash from 'react-native-bootsplash';
 import { Database } from 'db';
 import { RootNavigator } from './app/navigation';
 import { setInitialStorageData } from './app/storage';
@@ -17,6 +18,7 @@ import {
   useAppColorScheme,
 } from './app/styles';
 import './app/styles/unistyles';
+import { ErrorWrapper as ErrorCatcher } from './app/containers';
 
 const database = Database.getInstance();
 
@@ -36,27 +38,27 @@ function App(): React.JSX.Element {
   );
 
   return (
-    <SafeAreaView
-      style={styles.container(navigationContainerTheme.colors.card)}
-    >
-      <View style={styles.content}>
-        <DatabaseProvider database={database}>
+    <ErrorCatcher>
+      <DatabaseProvider database={database}>
+        <View style={styles.content}>
           <NavigationContainer
             ref={navigationRef}
             theme={navigationContainerTheme}
+            onReady={() => {
+              BootSplash.hide({ fade: true });
+            }}
           >
             <RootNavigator />
           </NavigationContainer>
-        </DatabaseProvider>
-      </View>
-    </SafeAreaView>
+        </View>
+      </DatabaseProvider>
+    </ErrorCatcher>
   );
 }
 
 export default App;
 
 const stylesheet = createStyleSheet((theme) => ({
-  container: (bgc: string) => ({ backgroundColor: bgc, flex: 1 }),
   content: {
     backgroundColor: theme.colors.background.light,
     flex: 1,

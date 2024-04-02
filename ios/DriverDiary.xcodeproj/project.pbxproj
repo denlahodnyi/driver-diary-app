@@ -20,6 +20,7 @@
 		646667C2A986485D9D8FBFF5 /* Poppins-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BE20F9291B1D4C85B55508D9 /* Poppins-Medium.ttf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		B57BF361BBAF44699359A95C /* Poppins-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FD54CB7057AA450C806E833E /* Poppins-Light.ttf */; };
+		CA6C877ED19D4F61BC34CCD7 /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5108E902936D48F59B06DCA8 /* BootSplash.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,6 +46,7 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = DriverDiary/main.m; sourceTree = "<group>"; };
 		23AFBE935955F6B13168CE37 /* Pods-DriverDiary-DriverDiaryTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DriverDiary-DriverDiaryTests.release.xcconfig"; path = "Target Support Files/Pods-DriverDiary-DriverDiaryTests/Pods-DriverDiary-DriverDiaryTests.release.xcconfig"; sourceTree = "<group>"; };
 		269900A64D7B4B8EB0F8A6E5 /* Poppins-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Black.ttf"; path = "../assets/fonts/Poppins-Black.ttf"; sourceTree = "<group>"; };
+		5108E902936D48F59B06DCA8 /* BootSplash.storyboard */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = BootSplash.storyboard; path = DriverDiary/BootSplash.storyboard; sourceTree = "<group>"; };
 		5CFBA2E0E72DFFFB958CD136 /* Pods-DriverDiary.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DriverDiary.debug.xcconfig"; path = "Target Support Files/Pods-DriverDiary/Pods-DriverDiary.debug.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = DriverDiary/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8C5FFDCE992A65ACA9D1810B /* Pods-DriverDiary-DriverDiaryTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DriverDiary-DriverDiaryTests.debug.xcconfig"; path = "Target Support Files/Pods-DriverDiary-DriverDiaryTests/Pods-DriverDiary-DriverDiaryTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -124,6 +126,7 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				5108E902936D48F59B06DCA8 /* BootSplash.storyboard */,
 			);
 			name = DriverDiary;
 			sourceTree = "<group>";
@@ -323,6 +326,7 @@
 				B57BF361BBAF44699359A95C /* Poppins-Light.ttf in Resources */,
 				646667C2A986485D9D8FBFF5 /* Poppins-Medium.ttf in Resources */,
 				30E1961CAC6B485C9ED2C75D /* Poppins-Regular.ttf in Resources */,
+				CA6C877ED19D4F61BC34CCD7 /* BootSplash.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -7,6 +7,7 @@ import {
   inputBaseInputWrapper,
   inputBaseLabel,
 } from '~/app/styles';
+import { getLineHeightByFontSize } from '~/shared/utils';
 import Icon from '../Icon';
 
 export type SelectInputProps = Parameters<typeof DropdownSelect>[0];
@@ -59,6 +60,8 @@ const stylesheet = createStyleSheet((theme) => ({
   },
   inputItem: {
     fontFamily: appFonts.Poppins.regular,
+    fontSize: 14,
+    lineHeight: getLineHeightByFontSize(14),
   },
   label: {
     ...inputBaseLabel(),

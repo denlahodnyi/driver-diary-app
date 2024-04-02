@@ -32,6 +32,7 @@ import { ActivityDeleteDecorator } from '~/features/activities/delete';
 import { activityModel } from '~/entities/activity';
 import { categoryLib } from '~/entities/category';
 import { ActivityCopyButton } from '~/features/activities/copy';
+import { getLineHeightByFontSize } from '~/shared/utils';
 import type { Activity as ActivityModel } from 'db';
 
 const MIN_DATE = new Date(APP_MIN_DATE_STR);
@@ -237,9 +238,16 @@ export default function Activity(
             items={selectedCategory.subcategories}
             placeholder={{ label: 'Select subcategory', value: null }}
             style={{
-              inputAndroid: [styles.subTitle, styles.editableText],
+              inputAndroid: [
+                styles.subTitle,
+                styles.editableText,
+                {
+                  lineHeight: getLineHeightByFontSize(styles.subTitle.fontSize),
+                },
+              ],
               inputIOS: [styles.subTitle, styles.editableText],
             }}
+            useNativeAndroidPickerStyle={false}
             value={form.subcategoryId}
             onValueChange={handleSubcategoryChange}
           />
@@ -249,13 +257,7 @@ export default function Activity(
             accessibilityHint="Press to change the date"
             onPress={() => setIsDatePickerOpen(true)}
           >
-            <View
-              style={{
-                alignItems: 'center',
-                flexDirection: 'row',
-                gap: 10,
-              }}
-            >
+            <View style={styles.withIconWrapper}>
               <Txt accessible={false}>
                 <Icon name="calendar-clear-outline" size={20} />
               </Txt>
@@ -280,7 +282,7 @@ export default function Activity(
             }}
           />
         </View>
-        <View style={[styles.section, { flexDirection: 'row', gap: 20 }]}>
+        <View style={[styles.section, styles.sectionDoubleColumn]}>
           <CostInput
             aria-labelledby="cost-input"
             containerProps={{ style: { flex: 1 } }}
@@ -395,13 +397,7 @@ export default function Activity(
         )}
       </View>
       <View style={styles.section}>
-        <View
-          style={{
-            alignItems: 'center',
-            flexDirection: 'row',
-            gap: 10,
-          }}
-        >
+        <View style={styles.withIconWrapper}>
           <Txt accessible={false}>
             <Icon name="calendar-clear-outline" size={22} />
           </Txt>
@@ -497,6 +493,7 @@ const stylesheet = createStyleSheet((theme) => ({
   section: {
     marginBottom: 20,
   },
+  sectionDoubleColumn: { flexDirection: 'row', gap: 20 },
   sectionLabel: {
     color: theme.colors.text.secondary,
   },
@@ -510,5 +507,10 @@ const stylesheet = createStyleSheet((theme) => ({
   },
   title: {
     fontSize: TITLE_FONT_SIZE,
+  },
+  withIconWrapper: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 10,
   },
 }));

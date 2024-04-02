@@ -1,6 +1,13 @@
-import { Text, type TextProps } from 'react-native';
+import {
+  Platform,
+  type StyleProp,
+  StyleSheet,
+  Text,
+  type TextProps,
+  type TextStyle,
+} from 'react-native';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
-import { toArray } from '~/shared/utils';
+import { getLineHeightByFontSize, toArray } from '~/shared/utils';
 import { appFonts } from '~/app/styles';
 
 type AppFonts = typeof appFonts;
@@ -17,6 +24,10 @@ const isFontWeight = <T extends FontFamilies>(
   fw: string | number | symbol,
 ): fw is keyof AppFonts[T] => {
   return Object.hasOwn(appFonts[ff], fw);
+};
+
+const flatMergedStyles = (styleProp: StyleProp<TextStyle>) => {
+  return StyleSheet.flatten(styleProp);
 };
 
 export default function Txt<T extends FontFamilies = 'Poppins'>(
@@ -37,7 +48,24 @@ export default function Txt<T extends FontFamilies = 'Poppins'>(
 
   return (
     <Text
-      style={[styles.text, styles.textFont(fw, fontFamily), ...toArray(style)]}
+      style={[
+        Platform.select({
+          android: () => {
+            // Set explicit lineHeight on Android to remove extra space at the
+            // bottom of the text
+            const flattenStyle = flatMergedStyles(style);
+
+            return flattenStyle?.fontSize
+              ? { lineHeight: getLineHeightByFontSize(flattenStyle.fontSize) }
+              : null;
+          },
+          default: () => null,
+          ios: () => null,
+        })(),
+        styles.text,
+        styles.textFont(fw, fontFamily),
+        ...toArray(style),
+      ]}
       {...rest}
     >
       {children}
