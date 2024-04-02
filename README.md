@@ -22,8 +22,7 @@ A simple demonstrative app for car management.
 - React Cosmos
 
 ## Demo
-
-Insert gif or link to demo
+![demo_main](https://github.com/denlahodnyi/driver-diary-app/assets/37402865/5758a024-4504-416a-8226-e74646f7ddcd)
 
 ## Run Locally
 
