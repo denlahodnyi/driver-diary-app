@@ -1,3 +1,5 @@
+import { Platform } from 'react-native';
+import { getLineHeightByFontSize } from '~/shared/utils';
 import type * as StyleTypes from './types';
 import { appFonts } from './fonts';
 
@@ -41,8 +43,13 @@ export const inputBaseInputWrapper = (theme: StyleTypes.BaseAppTheme) => ({
 
 export const inputBaseInput = (theme: StyleTypes.BaseAppTheme) => ({
   color: theme.colors.text.primary,
+  fontFamily: appFonts.Poppins.regular,
   fontSize: 18,
   paddingVertical: 14,
+  ...Platform.select({
+    android: { lineHeight: getLineHeightByFontSize(18) },
+    default: {},
+  }),
 });
 
 export const inputBaseError = (theme: StyleTypes.BaseAppTheme) => ({

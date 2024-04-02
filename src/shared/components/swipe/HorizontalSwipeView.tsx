@@ -1,16 +1,19 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import {
+  type Dispatch,
+  type SetStateAction,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { Animated, Easing, PanResponder, type ViewProps } from 'react-native';
 import { toArray } from '../../utils';
 import SwipeViewContext, { type Config } from './SwipeViewContext';
 
-type ConfigState = Config;
-
 type renderElementParam = {
   animatedValue: Animated.Value;
   resetSwipedState: () => void;
-  setConfig: (
-    value: ConfigState | ((value: ConfigState) => ConfigState),
-  ) => void;
+  setConfig: Dispatch<SetStateAction<Config>>;
 };
 
 type HorizontalSwipeViewProps = ViewProps & {
@@ -23,7 +26,7 @@ type HorizontalSwipeViewProps = ViewProps & {
   renderRightElement?: (o: renderElementParam) => React.ReactNode;
 };
 
-const DEFAULT_CONFIG: ConfigState = {
+const DEFAULT_CONFIG: Config = {
   fullLeftSwipeThreshold: 200,
   fullRightSwipeThreshold: 200,
   isFullLeftSwipeDisabled: false,
@@ -54,7 +57,10 @@ function HorizontalSwipeView(props: HorizontalSwipeViewProps) {
   } = props;
   const x = useRef(new Animated.Value(0)).current;
 
-  const [config, setConfig] = useState({ ...DEFAULT_CONFIG, ...userConfig });
+  const [config, setConfig] = useState<Config>({
+    ...DEFAULT_CONFIG,
+    ...userConfig,
+  });
 
   const performSwipeAnimation = (
     pos: number,
